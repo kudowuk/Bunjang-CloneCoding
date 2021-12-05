@@ -1,0 +1,12 @@
+Secret.java
+
+*.yml
+*.class
+*.jar
+*.properties
+
+.idea/
+.gradle/
+gradle/
+build/
+logs/
