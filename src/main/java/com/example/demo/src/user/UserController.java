@@ -13,7 +13,7 @@ import java.util.List;
 
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static com.example.demo.utils.ValidationRegex.*;
 
 @RestController
 @RequestMapping("/app/users")
@@ -37,30 +37,6 @@ public class UserController {
     }
 
     /**
-     * 회원 조회 API
-     * [GET] /users
-     * 회원 번호 및 이메일 검색 조회 API
-     * [GET] /users? Email=
-     * @return BaseResponse<List<GetUserRes>>
-     */
-    //Query String
-    @ResponseBody
-    @GetMapping("") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetUserRes>> getUsers(@RequestParam(required = false) String Email) {
-        try{
-            if(Email == null){
-                List<GetUserRes> getUsersRes = userProvider.getUsers();
-                return new BaseResponse<>(getUsersRes);
-            }
-            // Get Users
-            List<GetUserRes> getUsersRes = userProvider.getUsersByEmail(Email);
-            return new BaseResponse<>(getUsersRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
-
-    /**
      * 회원 1명 조회 API
      * [GET] /users/:userIdx
      * @return BaseResponse<GetUserRes>
@@ -71,6 +47,14 @@ public class UserController {
     public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
         // Get Users
         try{
+
+
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            //userIdx와 접근한 유저가 같은지 확인
+//            if(userIdx != userIdxByJwt){
+//                return new BaseResponse<>(INVALID_USER_JWT);
+//            }
+
             GetUserRes getUserRes = userProvider.getUser(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
@@ -89,13 +73,49 @@ public class UserController {
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        if(postUserReq.getEmail() == null){
+
+        // 이메일 입력하기
+        if(postUserReq.getEmail() == null || postUserReq.getEmail().equals("")){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
-        //이메일 정규표현
+        // 이메일 정규표현
         if(!isRegexEmail(postUserReq.getEmail())){
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
+
+        // 비밀번호 입력하기
+        if(postUserReq.getPassword() == null || postUserReq.getPassword().equals("")){
+            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+        }
+        // 비밀번호 정규표현
+        if(!isRegexPassword(postUserReq.getPassword())){
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
+        }
+
+        // 상점명 입력하기
+        if(postUserReq.getStoreName() == null || postUserReq.getStoreName().equals("")){
+            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+        }
+        // 상점명 정규표현
+        if(!isRegexStoreName(postUserReq.getStoreName())) {
+            return new BaseResponse<>(POST_USERS_INVALID_STORENAME);
+        }
+
+//        // 휴대전화 입력하기
+//        if(postUserReq.getPhone() == null || postUserReq.getPhone().equals("")){
+//            return new BaseResponse<>(POST_USERS_EMPTY_PHONE);
+//        }
+//        // 휴대폰 정규표현
+//        if(!isRegexPhone(postUserReq.getPhone())){
+//            return new BaseResponse<>(POST_USERS_INVALID_PHONE);
+//        }
+
+        // 유저 타입 E:이메일로 가입, K:카카오로 가입
+        if(!postUserReq.getUserType().equals("E") && !postUserReq.getUserType().equals("K")){
+            return new BaseResponse<>(POST_USERS_INVALID_USERTYPE);
+        }
+
+
         try{
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
@@ -137,7 +157,7 @@ public class UserController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getUserName());
+            PatchUserReq patchUserReq = new PatchUserReq(userIdx, user.getStoreName(), user.getBirthDate(), user.getPassword());
             userService.modifyUserName(patchUserReq);
 
             String result = "";

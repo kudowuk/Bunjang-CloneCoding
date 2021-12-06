@@ -31,16 +31,6 @@ public class UserProvider {
         this.jwtService = jwtService;
     }
 
-    public List<GetUserRes> getUsers() throws BaseException{
-        try{
-            List<GetUserRes> getUserRes = userDao.getUsers();
-            return getUserRes;
-        }
-        catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
     public List<GetUserRes> getUsersByEmail(String email) throws BaseException{
         try{
             List<GetUserRes> getUsersRes = userDao.getUsersByEmail(email);
@@ -61,6 +51,7 @@ public class UserProvider {
         }
     }
 
+    // 이메일 중복 체크
     public int checkEmail(String email) throws BaseException{
         try{
             return userDao.checkEmail(email);
@@ -69,6 +60,16 @@ public class UserProvider {
         }
     }
 
+    // 상점명 중복 체크
+    public int checkStoreName(String storeName) throws BaseException{
+        try{
+            return userDao.checkStoreName(storeName);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // POST 로그인
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
         User user = userDao.getPwd(postLoginReq);
         String password;

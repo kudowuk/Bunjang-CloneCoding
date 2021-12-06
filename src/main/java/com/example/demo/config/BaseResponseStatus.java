@@ -29,8 +29,14 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
-
-
+    POST_USERS_EMPTY_PASSWORD(false, 2018, "비밀번호를 입력해주세요."),
+    POST_USERS_INVALID_PASSWORD(false, 2019, "비밀번호를 '숫자', '문자', '특수문자' 각 1개 이상, 최소 8자에서 최대 16자이하로 입력해주세요"),
+    POST_USERS_EMPTY_STORENAME(false, 2020, "상점명을 입력해주세요."),
+    POST_USERS_INVALID_STORENAME(false, 2021, "상점명을 한글, 영어, 숫자만 입력해주세요(최대 10자)"),
+    POST_USERS_EXISTS_STORENAME(false,2022,"중복된 상점명입니다."),
+    POST_USERS_EMPTY_PHONE(false, 2023, "휴대전화를 입력해주세요."),
+    POST_USERS_INVALID_PHONE(false, 2024, "휴대전화형식에 맞게 숫자만 입력하세요."),
+    POST_USERS_INVALID_USERTYPE(false, 2025, "유저타입을 'E':이메일 또는 'K':카카오 중 한글자만 입력해주세요."),
 
     /**
      * 3000 : Response 오류

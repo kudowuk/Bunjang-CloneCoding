@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="3d76dc40-4690-4349-a5b5-55f88446d95d" name="Bunjang">
-        <fileTransfer accessType="SFTP" host="15.164.142.227" port="22" sshConfigId="13fdfba7-2b0b-4a3e-8462-7427df514912" sshConfig="ubuntu@15.164.142.227:22 key" keyPair="true">
+      <webServer id="3d76dc40-4690-4349-a5b5-55f88446d95d" name="Bunjang" url="https://knockit.life">
+        <fileTransfer rootFolder="/var/www/ssac3-test-server-kenta" accessType="SFTP" host="15.164.142.227" port="22" sshConfigId="13fdfba7-2b0b-4a3e-8462-7427df514912" sshConfig="ubuntu@15.164.142.227:22 key" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

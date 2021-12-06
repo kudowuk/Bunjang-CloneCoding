@@ -35,11 +35,16 @@ public class UserService {
 
     }
 
-    //POST
+    // POST 회원가입
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
-        //중복
+        // 이메일 중복
         if(userProvider.checkEmail(postUserReq.getEmail()) ==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
+        }
+
+        // 상점명 중복
+        if(userProvider.checkStoreName(postUserReq.getStoreName()) ==1){
+            throw new BaseException(POST_USERS_EXISTS_STORENAME);
         }
 
         String pwd;
