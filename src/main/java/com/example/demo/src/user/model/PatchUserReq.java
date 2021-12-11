@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Time;
 import java.util.Date;
 
 @Getter
@@ -11,7 +12,12 @@ import java.util.Date;
 @AllArgsConstructor
 public class PatchUserReq {
     private int userIdx;
-    private String storeName;
-    private Date birthDate;
-    private String password;
+    private String profiles;
+    private String StoreName;
+    private String storeAddress;
+    private Time contactableFrom;
+    private Time contactableTo;
+    private String storeIntro;
+    private String tradePolicy;
+    private String flag;
 }

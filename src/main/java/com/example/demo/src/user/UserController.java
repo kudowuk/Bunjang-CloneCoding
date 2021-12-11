@@ -9,8 +9,6 @@ import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
@@ -26,14 +24,15 @@ public class UserController {
     private final UserService userService;
     @Autowired
     private final JwtService jwtService;
+    @Autowired
+    private final UserDao userDao;
 
 
-
-
-    public UserController(UserProvider userProvider, UserService userService, JwtService jwtService){
+    public UserController(UserProvider userProvider, UserService userService, JwtService jwtService, UserDao userDao){
         this.userProvider = userProvider;
         this.userService = userService;
         this.jwtService = jwtService;
+        this.userDao = userDao;
     }
 
     /**
@@ -47,6 +46,14 @@ public class UserController {
     public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
         // Get Users
         try{
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
 
 
 //            int userIdxByJwt = jwtService.getUserIdx();
@@ -54,7 +61,6 @@ public class UserController {
 //            if(userIdx != userIdxByJwt){
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
-
             GetUserRes getUserRes = userProvider.getUser(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
@@ -110,11 +116,14 @@ public class UserController {
 //            return new BaseResponse<>(POST_USERS_INVALID_PHONE);
 //        }
 
+        // 유저타입 입력하기
+        if(postUserReq.getUserType() == null || postUserReq.getUserType().equals("")){
+            return new BaseResponse<>(POST_USERS_EMPTY_USERTYPE);
+        }
         // 유저 타입 E:이메일로 가입, K:카카오로 가입
         if(!postUserReq.getUserType().equals("E") && !postUserReq.getUserType().equals("K")){
             return new BaseResponse<>(POST_USERS_INVALID_USERTYPE);
         }
-
 
         try{
             PostUserRes postUserRes = userService.createUser(postUserReq);
@@ -148,18 +157,25 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/{userIdx}")
-    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user){
+    public BaseResponse<String> modifyStore(@PathVariable("userIdx") int userIdx, @RequestBody Store store){
         try {
-            //jwt에서 idx 추출.
-            int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-            if(userIdx != userIdxByJwt){
-                return new BaseResponse<>(INVALID_USER_JWT);
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
             }
-            //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx, user.getStoreName(), user.getBirthDate(), user.getPassword());
-            userService.modifyUserName(patchUserReq);
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
 
+//            //jwt에서 idx 추출.
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            //userIdx와 접근한 유저가 같은지 확인
+//            if(userIdx != userIdxByJwt){
+//                return new BaseResponse<>(INVALID_USER_JWT);
+//            }
+
+            userService.modifyStore(userIdx, store);
             String result = "";
         return new BaseResponse<>(result);
         } catch (BaseException exception) {

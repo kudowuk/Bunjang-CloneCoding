@@ -9,14 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostReviewReq {
 
-   private int storeIdx;
-   private int reviewScore;
-   private String reviewContent;
-   private String reviewImg1;
-   private String reviewImg2;
-   private String reviewImg3;
-   private String reviewImg4;
-   private String reviewImg5;
-   private String deliveryLike;
-
+   private int score;
+   private String content;
+   private String imgUrl1;
+   private String imgUrl2;
+   private String imgUrl3;
 }

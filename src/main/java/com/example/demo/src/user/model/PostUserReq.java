@@ -14,6 +14,6 @@ public class PostUserReq {
     private String password;
     private String storeName;
     private String phone;
-    private Date birthDate;
+    private String birthDate;
     private String userType;
 }

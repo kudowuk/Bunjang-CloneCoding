@@ -11,15 +11,13 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class GetReviewRes {
 
-    private String userName;
-    private int reviewScore;
+    private int reviewIdx;
+    private String storeName;
+    private int score;
+    private String content;
+    private String productName;
+    private String imgUrl1;
+    private String imgUrl2;
+    private String imgUrl3;
     private Timestamp createdAt;
-    private String menuName;
-    private String reviewContent;
-    private String reviewImg1;
-    private String reviewImg2;
-    private String reviewImg3;
-    private String reviewImg4;
-    private String reviewImg5;
-    private int cntHelp;
 }

@@ -36,7 +36,8 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_STORENAME(false,2022,"중복된 상점명입니다."),
     POST_USERS_EMPTY_PHONE(false, 2023, "휴대전화를 입력해주세요."),
     POST_USERS_INVALID_PHONE(false, 2024, "휴대전화형식에 맞게 숫자만 입력하세요."),
-    POST_USERS_INVALID_USERTYPE(false, 2025, "유저타입을 'E':이메일 또는 'K':카카오 중 한글자만 입력해주세요."),
+    POST_USERS_EMPTY_USERTYPE(false, 2025, "유저타입을 입력해주세요."),
+    POST_USERS_INVALID_USERTYPE(false, 2026, "유저타입을 'E':이메일 또는 'K':카카오 중 한글자만 입력해주세요."),
 
     /**
      * 3000 : Response 오류
@@ -47,8 +48,13 @@ public enum BaseResponseStatus {
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
+    // [GET] /users
+    NOT_EXIST_USER(false, 3015, "없는 유저입니다. 다시 확인해주세요."),
+    BREAKAWAY_USER(false, 3016, "탈퇴한 유저입니다."),
 
-
+    // [GET] /address
+    NOT_EXIST_ADDRESS(false, 3031, "없는 주소입니다. 다시 확인해주세요."),
+    DELETED_ADDRESS(false, 3032, "삭제한 주소입니다."),
 
     /**
      * 4000 : Database, Server 오류
@@ -56,11 +62,17 @@ public enum BaseResponseStatus {
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
 
-    //[PATCH] /users/{userIdx}
-    MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
+    // [PATCH] /users/{userIdx}
+    MODIFY_FAIL_USERNAME(false,4010,"유저네임 수정 실패"),
 
-    PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    // [PATCH] /users/{userIdx}/addresses/{addressIdx}
+    MODIFY_FAIL_ADDRESS(false,4013,"배송자 수정 실패"),
+
+    // [PATCH] /users/{userIdx}/{purchaseIdx}/{reviewIdx}
+    MODIFY_FAIL_REVIEW(false,4014,"상점후기 수정 실패"),
+
+    PASSWORD_ENCRYPTION_ERROR(false, 4021, "비밀번호 암호화에 실패하였습니다."),
+    PASSWORD_DECRYPTION_ERROR(false, 4022, "비밀번호 복호화에 실패하였습니다.");
 
 
     // 5000 : 필요시 만들어서 쓰세요

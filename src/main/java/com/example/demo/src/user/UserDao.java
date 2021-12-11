@@ -26,37 +26,34 @@ public class UserDao {
         return this.jdbcTemplate.query(getUsersByEmailQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getInt("userIdx"),
+                        rs.getString("profiles"),
                         rs.getString("storeName"),
-                        rs.getFloat("avgScore"),
-                        rs.getInt("cntLikes"),
-                        rs.getInt("cntReviews"),
-                        rs.getInt("cntFollowers"),
-                        rs.getInt("cntFollowings")),
+                        rs.getString("storeAddress"),
+                        rs.getTime("contactableFrom"),
+                        rs.getTime("contactableTo"),
+                        rs.getString("storeIntro"),
+                        rs.getString("tradePolicy"),
+                        rs.getString("flag")),
                 getUsersByEmailParams);
     }
 
     public GetUserRes getUser(int userIdx){
-        String getUserQuery = "SELECT userIdx, storeName,\n" +
-                "       (SELECT AVG(R.score)\n" +
-                "       FROM Review R\n" +
-                "       INNER JOIN Purchase Pu on R.userIdx = Pu.userIdx\n" +
-                "       INNER JOIN Product Pr on Users.userIdx = Pr.userIdx\n" +
-                "       INNER JOIN Pr on Pr.productIdx = R.productIdx\n" +
-                "       WHERE Users.userIdx = ? ) AS avgScore\n" +
-                "FROM Users\n" +
-                "INNER JOIN Likes L on Users.userIdx = L.userIdx\n" +
-                "\n" +
-                "WHERE userIdx = ;";
+        String getUserQuery = "SELECT S.userIdx, S.profiles, U.storeName, S.storeAddress, S.contactableFrom, S.contactableTo, S.storeIntro, S.tradePolicy, S.flag\n" +
+                "FROM Store S\n" +
+                "LEFT JOIN Users U on S.userIdx = U.userIdx\n" +
+                "WHERE U.userIdx = ?;";
         int getUserParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getInt("userIdx"),
+                        rs.getString("profiles"),
                         rs.getString("storeName"),
-                        rs.getFloat("avgScore"),
-                        rs.getInt("cntLikes"),
-                        rs.getInt("cntReviews"),
-                        rs.getInt("cntFollowers"),
-                        rs.getInt("cntFollowings")),
+                        rs.getString("storeAddress"),
+                        rs.getTime("contactableFrom"),
+                        rs.getTime("contactableTo"),
+                        rs.getString("storeIntro"),
+                        rs.getString("tradePolicy"),
+                        rs.getString("flag")),
                 getUserParams);
     }
 
@@ -64,12 +61,21 @@ public class UserDao {
     public int createUser(PostUserReq postUserReq){
         String createUserQuery = "insert into Users (email, password, storeName, phone, birthDate, userType) VALUES (?,?,?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getStoreName(), postUserReq.getPhone(), postUserReq.getBirthDate(), postUserReq.getUserType()};
-
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
+
+    public int createStore(int userIdx){
+        String createStoreQuery = "insert into Store (userIdx) VALUES (?)";
+        Object[] createStoreParams = new Object[]{userIdx};
+        this.jdbcTemplate.update(createStoreQuery, createStoreParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
+
 
     // 이메일 중복 체크
     public int checkEmail(String email){
@@ -91,12 +97,24 @@ public class UserDao {
 
     }
 
-    public int modifyUserName(PatchUserReq patchUserReq){
-        String modifyUserNameQuery = "update Users set storeName = ?, password = ?, birthDate = ? where userIdx = ? ";
-        Object[] modifyUserNameParams = new Object[]{patchUserReq.getStoreName(), patchUserReq.getBirthDate(), patchUserReq.getPassword(), patchUserReq.getUserIdx()};
+//    public int modifyStoreName(PatchUserReq patchUserReq){
+//        String modifyUserNameQuery = "UPDATE Users SET storeName  WHERE userIdx = ?";
+//        Object[] modifyUserNameParams = new Object[]{patchUserReq.getUserIdx(), patchUserReq.getStoreName()};
+//
+//        return this.jdbcTemplate.update(modifyUserNameQuery,modifyUserNameParams);
+//    }
 
-        return this.jdbcTemplate.update(modifyUserNameQuery,modifyUserNameParams);
+    public int modifyStoreInfo(int userIdx, Store store){
+        String modifyStoreInfoQuery = "UPDATE Store SET profiles = ?, storeAddress = ?, contactableFrom = ?, contactableTo = ?, storeIntro = ?, tradePolicy = ?, flag = ? WHERE userIdx = ?";
+        Object[] modifyStoreInfoParams = new Object[]{store.getProfiles(), store.getStoreAddress(), store.getContactableFrom(), store.getContactableTo(), store.getStoreIntro(), store.getTradePolicy(), store.getFlag(), userIdx};
+        this.jdbcTemplate.update(modifyStoreInfoQuery,modifyStoreInfoParams);
+
+        String modifyStoreNameQuery = "UPDATE Users SET storeName = ? WHERE userIdx = ?";
+        Object[] modifyStoreNameParams = new Object[]{store.getStoreName(), userIdx};
+        return this.jdbcTemplate.update(modifyStoreNameQuery,modifyStoreNameParams);
     }
+
+
 
     public User getPwd(PostLoginReq postLoginReq){
         String getPwdQuery = "select userIdx, email, password, storeName, birthDate, userType from Users where email = ?";
@@ -107,12 +125,26 @@ public class UserDao {
                         rs.getInt("userIdx"),
                         rs.getString("email"),
                         rs.getString("storeName"),
-                        rs.getDate("birthDate"),
+                        rs.getString("birthDate"),
                         rs.getString("password")
                 ),
                 getPwdParams
                 );
 
+    }
+
+    // 유저 유무 확인
+    public int checkUserIdx(int userIdx){
+        String checkUserIdxQuery = "select exists(select userIdx from Users where userIdx = ?)";
+        int checkUserIdxParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserIdxQuery, int.class, checkUserIdxParams);
+    }
+
+    // 유저 탈퇴 확인
+    public int checkStatusUserIdx(int userIdx){
+        String checkUserIdxQuery = "select exists(select userIdx from Users where userIdx = ? AND Users.status = 'N')";
+        int checkUserIdxParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserIdxQuery, int.class, checkUserIdxParams);
     }
 
 

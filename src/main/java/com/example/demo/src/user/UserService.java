@@ -13,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
 // Service Create, Update, Delete 의 로직 처리
 @Service
 public class UserService {
+
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserDao userDao;
@@ -57,6 +57,9 @@ public class UserService {
         }
         try{
             int userIdx = userDao.createUser(postUserReq);
+
+            userDao.createStore(userIdx);
+
             //jwt 발급.
             String jwt = jwtService.createJwt(userIdx);
             return new PostUserRes(jwt,userIdx);
@@ -65,13 +68,13 @@ public class UserService {
         }
     }
 
-    public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {
-        try{
-            int result = userDao.modifyUserName(patchUserReq);
-            if(result == 0){
+    public void modifyStore(int userIdx, Store store) throws BaseException {
+        try {
+            int result = userDao.modifyStoreInfo(userIdx, store);
+            if (result == 0) {
                 throw new BaseException(MODIFY_FAIL_USERNAME);
             }
-        } catch(Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }

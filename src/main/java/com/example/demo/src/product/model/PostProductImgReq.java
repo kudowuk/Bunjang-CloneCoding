@@ -1,2 +1,15 @@
-package com.example.demo.src.product.model;public class PostProductImgReq {
+package com.example.demo.src.product.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+public class PostProductImgReq {
+
+    private int productIdx;
+    private String imgUrl;
+
 }

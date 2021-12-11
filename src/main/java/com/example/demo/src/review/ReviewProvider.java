@@ -23,19 +23,14 @@ public class ReviewProvider {
         this.reviewDao = reviewDao;
     }
 
-    public List<GetReviewRes> getReviews(int userIdx, int storeIdx) throws BaseException {
+    public List<GetReviewRes> getReviews(int userIdx) throws BaseException {
         try{
-            List<GetReviewRes> getReviewRes = reviewDao.getReviews(userIdx, storeIdx);
+            List<GetReviewRes> getReviewRes = reviewDao.getReviews(userIdx);
             return getReviewRes;
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
-    }
-
-    public GetReviewRes getReview(int userIdx, int reviewIdx) throws BaseException {
-        GetReviewRes getReviewRes = reviewDao.getReview(userIdx, reviewIdx);
-        return getReviewRes;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.demo.src.product.model;
+package com.example.demo.src.category.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,5 +14,5 @@ public class GetCategoryRes {
     private int categoryIdx;
     private String categoryName;
 
-    private List<Subcategory> subcategoryList;
+    private List<SubcategoryVo> subcategoryList;
 }

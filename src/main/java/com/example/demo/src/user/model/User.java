@@ -13,6 +13,6 @@ public class User {
     private int userIdx;
     private String email;
     private String storeName;
-    private Date birthDate;
+    private String birthDate;
     private String password;
 }

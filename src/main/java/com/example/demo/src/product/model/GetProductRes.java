@@ -1,2 +1,36 @@
-package com.example.demo.src.product.model;public class GetProductRes {
+package com.example.demo.src.product.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+public class GetProductRes {
+
+   private int productIdx;
+   private int prices;
+   private String productName;
+   private String areaName;
+   private String conditions;
+   private String freeShipping;
+   private String negotiable;
+   private String changes;
+   private int quantity;
+   private String content;
+   private String subcategoryName;
+   private String storeName;
+
+   private List<ProductImg>imgList;
+   private List<ProductTag>tagList;
+
+
+
+
+
+
 }
+
