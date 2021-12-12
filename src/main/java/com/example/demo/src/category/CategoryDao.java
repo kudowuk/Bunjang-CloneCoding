@@ -62,7 +62,6 @@ public class CategoryDao {
                 "INNER JOIN Category C on S.categoryIdx = C.categoryIdx\n" +
                 "WHERE subcategoryIdx = ?;";
         int getSubcategoryParams = subcategoryIdx;
-//        int getSubcategoryByUserIdxParams = userIdx;
 
         List<GetSubcategoryRes> result = new ArrayList<>();
 
