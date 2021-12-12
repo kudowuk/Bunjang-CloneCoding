@@ -2,7 +2,6 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.category.model.GetCategoryRes;
 import com.example.demo.src.product.model.*;
 import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;
@@ -10,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -45,24 +46,25 @@ public class ProductController {
      * 상품 조회 API
      * [GET] /products/
      */
-//    @ResponseBody
-//    @GetMapping("/{userIdx}")
-//    public BaseResponse<List<GetOrderRes>> getOrders(@PathVariable("userIdx") int userIdx) {
-//        try {
+    @ResponseBody
+    @GetMapping("")
+    public BaseResponse<List<GetMainRes>> getMains() {
+        try {
+
 //            //jwt에서 idx 추출.
 //            int userIdxByJwt = jwtService.getUserIdx();
 //            //userIdx와 접근한 유저가 같은지 확인
 //            if(userIdx != userIdxByJwt) {
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
-//
-//            List<GetOrderRes> getOrderRes = orderProvider.getOrders(userIdx);
-//            return new BaseResponse<>(getOrderRes);
-//
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+
+            List<GetMainRes> getMainRes = productProvider.getMains();
+            return new BaseResponse<>(getMainRes);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
     /**
