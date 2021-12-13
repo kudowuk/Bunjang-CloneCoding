@@ -51,9 +51,15 @@ public class ProductController {
     public BaseResponse<List<GetMainRes>> getMains() {
         try {
 
+<<<<<<< HEAD
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
+=======
+//            //jwt에서 idx 추출.
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            //userIdx와 접근한 유저가 같은지 확인
+>>>>>>> e123a4da2b88251e595b8b3198c31a29a675a546
 //            if(userIdx != userIdxByJwt) {
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
