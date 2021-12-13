@@ -40,8 +40,13 @@ public class ProductProvider {
 
     // GET 특정 상품 조회 API
     public GetProductRes getProduct(int productIdx) throws BaseException {
-        GetProductRes getProductRes = productDao.getProduct(productIdx);
-        return getProductRes;
+        try{
+            GetProductRes getProductRes = productDao.getProduct(productIdx);
+            return getProductRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 

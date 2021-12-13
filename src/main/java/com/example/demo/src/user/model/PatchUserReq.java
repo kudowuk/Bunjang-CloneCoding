@@ -15,8 +15,7 @@ public class PatchUserReq {
     private String profiles;
     private String StoreName;
     private String storeAddress;
-    private Time contactableFrom;
-    private Time contactableTo;
+    private String contactableTime;
     private String storeIntro;
     private String tradePolicy;
     private String flag;

@@ -34,6 +34,10 @@ public class CategoryController {
     @GetMapping("")
     public BaseResponse<List<GetCategoryRes>> getCategories() {
         try {
+
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+
             List<GetCategoryRes> getCategoryRes = categoryProvider.getCategories();
             return new BaseResponse<>(getCategoryRes);
 
@@ -50,12 +54,9 @@ public class CategoryController {
         // Get Category
         try {
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+
 
             GetSubcategoryRes getSubcategoryRes = categoryProvider.getSubcategory(subcategoryIdx);
             return new BaseResponse<>(getSubcategoryRes);

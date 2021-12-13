@@ -15,8 +15,7 @@ public class Store {
     private String storeName;
     private String storeAddress;
     private String storeIntro;
-    private Time contactableFrom;
-    private Time contactableTo;
+    private String contactableTime;
     private String tradePolicy;
     private String flag;
 }

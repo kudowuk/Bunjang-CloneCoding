@@ -51,12 +51,13 @@ public class AddressController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
             List<GetAddressRes> getAddressRes = addressProvider.getAddresses(userIdx);
             return new BaseResponse<>(getAddressRes);
 
@@ -80,12 +81,12 @@ public class AddressController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             GetAddressRes getAddressRes = addressProvider.getAddress(userIdx, addressIdx);
             return new BaseResponse<>(getAddressRes);
@@ -108,12 +109,13 @@ public class AddressController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
             PostAddressRes postAddressRes = addressService.createAddress(userIdx, postAddressReq);
             return new BaseResponse<>(postAddressRes);
         } catch(BaseException exception){
@@ -136,12 +138,12 @@ public class AddressController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             PatchAddressReq patchAddressReq = new PatchAddressReq(userIdx, addressIdx, address.getRecipient(), address.getPhone(), address.getLatitude(), address.getLongitude(), address.getRoadName(), address.getDetailedAddress(), address.getRequestMsg(), address.getStatus() );
             addressService.modifyAddress(patchAddressReq);

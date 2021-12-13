@@ -16,8 +16,7 @@ public class GetUserRes {
     private String profiles;
     private String storeName;
     private String storeAddress;
-    private Time contactableFrom;
-    private Time contactableTo;
+    private String contactableTime;
     private String storeIntro;
     private String tradePolicy;
     private String flag;

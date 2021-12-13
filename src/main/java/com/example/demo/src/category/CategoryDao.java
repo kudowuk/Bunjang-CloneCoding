@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,17 +73,24 @@ public class CategoryDao {
                         rs.getString("imgUrl")),
                 getSubcategoryParams);
 
-        String goodsSql = "SELECT P.productIdx, P.prices, P.productName, PI2.imgUrl\n" +
-                "FROM Product P, (SELECT PI.imgUrl FROM ProductImg PI INNER JOIN Product on PI.productIdx = P.productIdx INNER JOIN Subcategory S on P.subcategoryIdx = S.subcategoryIdx WHERE S.subcategoryIdx = ? AND PI.status = 'Y' ORDER BY PI.productImgIdx LIMIT 1) img\n" +
-                "INNER JOIN ProductImg PI2 on P12.productIdx = P.productIdx\n" +
-                "WHERE P.subcategoryIdx = ? AND P.status = 'Y' ORDER BY P.updatedAt;";
+        String goodsSql = "SELECT P.productIdx, P.prices, P.productName, A.areaName, P.createdAt, P.safePayment,\n" +
+                "       (SELECT count(L.likeIdx) FROM Likes L WHERE P.productIdx = L.productIdx) cntLikes,\n" +
+                "       (SELECT imgUrl FROM ProductImg PI INNER JOIN Product on PI.productIdx = P.productIdx ORDER BY PI.productImgIdx LIMIT 1) imgUrl\n" +
+                "FROM Product P\n" +
+                "LEFT JOIN Area A on P.areaIdx = A.areaIdx\n" +
+                "INNER JOIN Subcategory S on P.subcategoryIdx = S.subcategoryIdx\n" +
+                "WHERE P.subcategoryIdx = ? AND P.status = 'Y'";
 
         List<Goods> goodsList = this.jdbcTemplate.query(goodsSql,
                 (rs, rowNum) -> new Goods(
                         rs.getInt("productIdx"),
                         rs.getString("imgUrl"),
                         rs.getInt("prices"),
-                        rs.getString("productName")),
+                        rs.getString("productName"),
+                        rs.getString("areaName"),
+                        rs.getTimestamp("createdAt"),
+                        rs.getString("safePayment"),
+                        rs.getInt("cntLikes")),
                 subcategory.getSubcategoryIdx());
 
         GetSubcategoryRes getSubcategoryRes = new GetSubcategoryRes(subcategory.getSubcategoryIdx(), subcategory.getSubcategoryName(), subcategory.getImgUrl(), goodsList);

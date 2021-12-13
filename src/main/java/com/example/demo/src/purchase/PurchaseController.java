@@ -43,12 +43,12 @@ public class PurchaseController {
     public BaseResponse<PostPurchaseRes> createPurchase(@PathVariable("userIdx") int userIdx, @RequestBody PostPurchaseReq postPurchaseReq) {
 
         try{
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             PostPurchaseRes postPurchaseRes = purchaseService.createPurchase(userIdx, postPurchaseReq);
             return new BaseResponse<>(postPurchaseRes);

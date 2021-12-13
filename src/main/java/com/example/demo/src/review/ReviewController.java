@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.demo.config.BaseResponseStatus.*;
+
 
 @RestController
 @RequestMapping("/app/reviews")
@@ -40,6 +42,13 @@ public class ReviewController {
     @GetMapping("/{userIdx}")
     public BaseResponse<List<GetReviewRes>> getReviews(@PathVariable("userIdx") int userIdx) {
         try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
             List<GetReviewRes> getReviewRes = reviewProvider.getReviews(userIdx);
             return new BaseResponse<>(getReviewRes);
 
@@ -55,12 +64,12 @@ public class ReviewController {
 
 
         try{
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             PostReviewRes postReviewRes = reviewService.createReview(userIdx, purchaseIdx, postReviewReq);
             return new BaseResponse<>(postReviewRes);
@@ -76,17 +85,17 @@ public class ReviewController {
 
 
         try {
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             PatchReviewReq patchReviewReq = new PatchReviewReq(userIdx, purchaseIdx, reviewIdx, review.getScore(), review.getContent(), review.getImgUrl1(), review.getImgUrl2(), review.getImgUrl3(), review.getStatus() );
             reviewService.modifyReview(patchReviewReq);
 
-            String result = "";
+            String result = "상점 후기가 수정되었습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

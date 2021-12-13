@@ -68,8 +68,13 @@ public enum BaseResponseStatus {
     // [PATCH] /users/{userIdx}/addresses/{addressIdx}
     MODIFY_FAIL_ADDRESS(false,4013,"배송자 수정 실패"),
 
-    // [PATCH] /users/{userIdx}/{purchaseIdx}/{reviewIdx}
+    // [PATCH] /reviews/{userIdx}/{purchaseIdx}/{reviewIdx}
     MODIFY_FAIL_REVIEW(false,4014,"상점후기 수정 실패"),
+
+    // [PATCH] /likes/{userIdx}/{likedIdx}
+    MODIFY_FAIL_LIKE(false,4015,"즐겨찾기 수정 실패"),
+    
+    
 
     PASSWORD_ENCRYPTION_ERROR(false, 4021, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4022, "비밀번호 복호화에 실패하였습니다.");

@@ -30,7 +30,7 @@ public class GetMainRes {
     private int cntFollowers;
     private float avgScores;
 
-    private List<ProductImg> imgArray;
-    private List<ProductTag> tagArray;
+    private List<ProductImg> imgList;
+    private List<ProductTag> tagList;
 
 }

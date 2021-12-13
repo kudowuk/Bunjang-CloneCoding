@@ -29,8 +29,7 @@ public class UserDao {
                         rs.getString("profiles"),
                         rs.getString("storeName"),
                         rs.getString("storeAddress"),
-                        rs.getTime("contactableFrom"),
-                        rs.getTime("contactableTo"),
+                        rs.getString("contactableTime"),
                         rs.getString("storeIntro"),
                         rs.getString("tradePolicy"),
                         rs.getString("flag")),
@@ -38,7 +37,7 @@ public class UserDao {
     }
 
     public GetUserRes getUser(int userIdx){
-        String getUserQuery = "SELECT S.userIdx, S.profiles, U.storeName, S.storeAddress, S.contactableFrom, S.contactableTo, S.storeIntro, S.tradePolicy, S.flag\n" +
+        String getUserQuery = "SELECT S.userIdx, S.profiles, U.storeName, S.storeAddress, S.contactableTime, S.storeIntro, S.tradePolicy, S.flag\n" +
                 "FROM Store S\n" +
                 "LEFT JOIN Users U on S.userIdx = U.userIdx\n" +
                 "WHERE U.userIdx = ?;";
@@ -49,8 +48,7 @@ public class UserDao {
                         rs.getString("profiles"),
                         rs.getString("storeName"),
                         rs.getString("storeAddress"),
-                        rs.getTime("contactableFrom"),
-                        rs.getTime("contactableTo"),
+                        rs.getString("contactableTime"),
                         rs.getString("storeIntro"),
                         rs.getString("tradePolicy"),
                         rs.getString("flag")),
@@ -105,8 +103,8 @@ public class UserDao {
 //    }
 
     public int modifyStoreInfo(int userIdx, Store store){
-        String modifyStoreInfoQuery = "UPDATE Store SET profiles = ?, storeAddress = ?, contactableFrom = ?, contactableTo = ?, storeIntro = ?, tradePolicy = ?, flag = ? WHERE userIdx = ?";
-        Object[] modifyStoreInfoParams = new Object[]{store.getProfiles(), store.getStoreAddress(), store.getContactableFrom(), store.getContactableTo(), store.getStoreIntro(), store.getTradePolicy(), store.getFlag(), userIdx};
+        String modifyStoreInfoQuery = "UPDATE Store SET profiles = ?, storeAddress = ?, contactableTime = ?, storeIntro = ?, tradePolicy = ?, flag = ? WHERE userIdx = ?";
+        Object[] modifyStoreInfoParams = new Object[]{store.getProfiles(), store.getStoreAddress(), store.getContactableTime(), store.getStoreIntro(), store.getTradePolicy(), store.getFlag(), userIdx};
         this.jdbcTemplate.update(modifyStoreInfoQuery,modifyStoreInfoParams);
 
         String modifyStoreNameQuery = "UPDATE Users SET storeName = ? WHERE userIdx = ?";

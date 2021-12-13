@@ -51,9 +51,9 @@ public class ProductController {
     public BaseResponse<List<GetMainRes>> getMains() {
         try {
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
 //            if(userIdx != userIdxByJwt) {
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
@@ -76,10 +76,9 @@ public class ProductController {
     public BaseResponse<GetProductRes> getProduct(@PathVariable("productIdx") int productIdx) {
         // Get Product
         try {
-
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
 //            if(userIdx != userIdxByJwt) {
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
