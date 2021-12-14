@@ -38,17 +38,15 @@ public class CategoryProvider {
 
 
     // GET 서브카테고리 해당 상품 조회 API
-    public GetSubcategoryRes getSubcategory(int subcategoryIdx) throws BaseException {
+    public GetSubcategoryRes getSubcategory(int userIdx, int subcategoryIdx) throws BaseException {
 
-        GetSubcategoryRes getSubcategoryRes = categoryDao.getSubcategory(subcategoryIdx);
-        return getSubcategoryRes;
-//        try{
-//            GetSubcategoryRes getSubcategoryRes = categoryDao.getSubcategory(subcategoryIdx);
-//            return getSubcategoryRes;
-//        }
-//        catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
+        try{
+            GetSubcategoryRes getSubcategoryRes = categoryDao.getSubcategory(userIdx, subcategoryIdx);
+            return getSubcategoryRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 }

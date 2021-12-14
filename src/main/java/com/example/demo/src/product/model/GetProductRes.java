@@ -29,6 +29,7 @@ public class GetProductRes {
    private String storeName;
    private int cntFollowers;
    private float avgScores;
+   private String statusLike;
 
    private List<ProductImg> imgList;
    private List<ProductTag> tagList;

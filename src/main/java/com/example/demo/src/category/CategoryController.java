@@ -57,8 +57,7 @@ public class CategoryController {
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
 
-
-            GetSubcategoryRes getSubcategoryRes = categoryProvider.getSubcategory(subcategoryIdx);
+            GetSubcategoryRes getSubcategoryRes = categoryProvider.getSubcategory(userIdxByJwt, subcategoryIdx);
             return new BaseResponse<>(getSubcategoryRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

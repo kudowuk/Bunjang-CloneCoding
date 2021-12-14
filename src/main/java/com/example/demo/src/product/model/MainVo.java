@@ -28,5 +28,6 @@ public class MainVo {
     private String storeName;
     private int cntFollowers;
     private float avgScores;
+    private String statusLike;
 
 }

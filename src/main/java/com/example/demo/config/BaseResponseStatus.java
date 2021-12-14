@@ -32,12 +32,43 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_PASSWORD(false, 2018, "비밀번호를 입력해주세요."),
     POST_USERS_INVALID_PASSWORD(false, 2019, "비밀번호를 '숫자', '문자', '특수문자' 각 1개 이상, 최소 8자에서 최대 16자이하로 입력해주세요"),
     POST_USERS_EMPTY_STORENAME(false, 2020, "상점명을 입력해주세요."),
-    POST_USERS_INVALID_STORENAME(false, 2021, "상점명을 한글, 영어, 숫자만 입력해주세요(최대 10자)"),
+    POST_USERS_INVALID_STORENAME(false, 2021, "상점명을 한글, 영어, 숫자만 입력해주세요(최소 2자 최대 10자)"),
     POST_USERS_EXISTS_STORENAME(false,2022,"중복된 상점명입니다."),
     POST_USERS_EMPTY_PHONE(false, 2023, "휴대전화를 입력해주세요."),
     POST_USERS_INVALID_PHONE(false, 2024, "휴대전화형식에 맞게 숫자만 입력하세요."),
     POST_USERS_EMPTY_USERTYPE(false, 2025, "유저타입을 입력해주세요."),
     POST_USERS_INVALID_USERTYPE(false, 2026, "유저타입을 'E':이메일 또는 'K':카카오 중 한글자만 입력해주세요."),
+
+    // [PATCH] /users
+    PATCH_USERS_EMPTY_STORENAME(false, 2030, "수정할 상점명을 입력해주세요."),
+    PATCH_USERS_INVALID_STORENAME(false, 2031, "수정할 상점명을 한글, 영어, 숫자만 입력해주세요(최소 2자 최대 10자)"),
+    PATCH_USERS_EMPTY_STOREADDRESS(false, 2032, "수정할 상점 주소를 입력해주세요."),
+    PATCH_USERS_EMPTY_CONTACTABLETIME(false, 2033, "수정할 연락가능시간을 입력해주세요."),
+
+    // [POST] /addresses
+    POST_ADDRESSES_EMPTY_RECIPIENT(false, 2040, "받는분 성함을 입력해주세요."),
+    POST_ADDRESSES_EMPTY_PHONE(false, 2041, "휴대전화를 입력해주세요."),
+    POST_ADDRESSES_INVALID_PHONE(false, 2042, "휴대전화형식에 맞게 숫자만 입력하세요."),
+    POST_ADDRESSES_EMPTY_LATITUDE(false, 2043, "국내 위도를 입력해주세요."),
+    POST_ADDRESSES_INVALID_LATITUDE(false, 2044, "알맞은 국내 위도를 작성해주세요."),
+    POST_ADDRESSES_EMPTY_LONGITUDE(false, 2045, "국내 경도를 입력해주세요."),
+    POST_ADDRESSES_INVALID_LONGITUDE(false, 2046, "알맞은 국내 경도를 작성해주세요."),
+    POST_ADDRESSES_EMPTY_ROADNAME(false, 2047, "도로명 주소를 입력해주세요."),
+    POST_ADDRESSES_EMPTY_STATUS(false, 2048, "배송지 주소 상태(구분)를 입력해주세요."),
+    POST_ADDRESSES_INVALID_STATUS(false, 2049, "'Y':활성화 또는 'M'(Main):기본배송지 중 한글자만 입력해주세요."),
+
+    // [PATCH] /addresses
+    PATCH_ADDRESSES_EMPTY_RECIPIENT(false, 2050, "수정할 받는분 성함을 입력해주세요."),
+    PATCH_ADDRESSES_EMPTY_PHONE(false, 2051, "수정할 휴대전화를 입력해주세요."),
+    PATCH_ADDRESSES_INVALID_PHONE(false, 2052, "휴대전화형식에 맞게 숫자만 입력하세요."),
+    PATCH_ADDRESSES_EMPTY_LATITUDE(false, 2053, "수정할 국내 위도를 입력해주세요."),
+    PATCH_ADDRESSES_INVALID_LATITUDE(false, 2054, "알맞은 국내 위도를 작성해주세요."),
+    PATCH_ADDRESSES_EMPTY_LONGITUDE(false, 2055, "수정할 국내 경도를 입력해주세요."),
+    PATCH_ADDRESSES_INVALID_LONGITUDE(false, 2056, "알맞은 국내 경도를 작성해주세요."),
+    PATCH_ADDRESSES_EMPTY_ROADNAME(false, 2057, "수정할 도로명 주소를 입력해주세요."),
+    PATCH_ADDRESSES_EMPTY_STATUS(false, 2058, "수정할 배송지 주소 상태(구분)를 입력해주세요."),
+    PATCH_ADDRESSES_INVALID_STATUS(false, 2059, "'Y':활성화 또는 'M'(Main):기본배송지 중 한글자만 입력해주세요."),
+
 
     /**
      * 3000 : Response 오류
@@ -48,11 +79,12 @@ public enum BaseResponseStatus {
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
-    // [GET] /users
+
+    // [GET], [PATCH] /users
     NOT_EXIST_USER(false, 3015, "없는 유저입니다. 다시 확인해주세요."),
     BREAKAWAY_USER(false, 3016, "탈퇴한 유저입니다."),
 
-    // [GET] /address
+    // [GET], [PATCH] /address
     NOT_EXIST_ADDRESS(false, 3031, "없는 주소입니다. 다시 확인해주세요."),
     DELETED_ADDRESS(false, 3032, "삭제한 주소입니다."),
 

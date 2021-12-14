@@ -29,13 +29,10 @@ public class GetMainRes {
     private String storeName;
     private int cntFollowers;
     private float avgScores;
+    private String statusLike;
 
-<<<<<<< HEAD
     private List<ProductImg> imgList;
     private List<ProductTag> tagList;
-=======
-    private List<ProductImg> imgArray;
-    private List<ProductTag> tagArray;
->>>>>>> e123a4da2b88251e595b8b3198c31a29a675a546
+
 
 }

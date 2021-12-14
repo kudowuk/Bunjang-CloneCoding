@@ -50,23 +50,11 @@ public class ProductController {
     @GetMapping("")
     public BaseResponse<List<GetMainRes>> getMains() {
         try {
-
-<<<<<<< HEAD
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-=======
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
->>>>>>> e123a4da2b88251e595b8b3198c31a29a675a546
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
 
-            List<GetMainRes> getMainRes = productProvider.getMains();
+            List<GetMainRes> getMainRes = productProvider.getMains(userIdxByJwt);
             return new BaseResponse<>(getMainRes);
-
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -84,12 +72,8 @@ public class ProductController {
         try {
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
 
-            GetProductRes getProductRes = productProvider.getProduct(productIdx);
+            GetProductRes getProductRes = productProvider.getProduct(userIdxByJwt, productIdx);
             return new BaseResponse<>(getProductRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -117,12 +101,12 @@ public class ProductController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             PostProductRes postProductRes = productService.createProduct(userIdx, postProductReq);
             return new BaseResponse<>(postProductRes);
@@ -142,12 +126,13 @@ public class ProductController {
     public BaseResponse<String> modifyProduct(@PathVariable("userIdx") int userIdx, @PathVariable("productIdx") int productIdx, @RequestBody Product product){
         try {
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
             PatchProductReq patchProductReq = new PatchProductReq(userIdx, productIdx, product.getProductName(), product.getSubcategoryIdx(), product.getContent(), product.getPrices(), product.getFreeShipping(), product.getNegotiable(), product.getAreaName(), product.getQuantity(), product.getConditions(), product.getChanges());
             productService.modifyProduct(patchProductReq);
             String result = "";

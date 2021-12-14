@@ -55,12 +55,12 @@ public class UserController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
             GetUserRes getUserRes = userProvider.getUser(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
@@ -141,6 +141,22 @@ public class UserController {
     @PostMapping("/logIn")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq){
         try{
+
+            // 이메일 입력하기
+            if(postLoginReq.getEmail() == null || postLoginReq.getEmail().equals("")){
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            // 이메일 정규표현
+            if(!isRegexEmail(postLoginReq.getEmail())){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            }
+
+            // 비밀번호 입력하기
+            if(postLoginReq.getPassword() == null || postLoginReq.getPassword().equals("")){
+                return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+            }
+
+
             // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
@@ -151,14 +167,36 @@ public class UserController {
     }
 
     /**
-     * 유저정보변경 API
+     * 상점정보변경 API
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/{userIdx}")
     public BaseResponse<String> modifyStore(@PathVariable("userIdx") int userIdx, @RequestBody Store store){
+
+        // 상점명 입력하기
+        if(store.getStoreName() == null || store.getStoreName().equals("")){
+            return new BaseResponse<>(PATCH_USERS_EMPTY_STORENAME);
+        }
+        // 상점명 정규표현
+        if(!isRegexStoreName(store.getStoreName())) {
+            return new BaseResponse<>(PATCH_USERS_INVALID_STORENAME);
+        }
+
+        // 상점주소 입력하기
+        if(store.getContactableTime() == null || store.getContactableTime().equals("")){
+            return new BaseResponse<>(PATCH_USERS_EMPTY_STOREADDRESS);
+        }
+
+        // 연락가능시간 입력하기
+        if(store.getContactableTime() == null || store.getContactableTime().equals("")){
+            return new BaseResponse<>(PATCH_USERS_EMPTY_CONTACTABLETIME);
+        }
+
+
         try {
+
             // 유저 유무 확인
             if(userDao.checkUserIdx(userIdx) == 0) {
                 throw new BaseException(NOT_EXIST_USER);
@@ -168,15 +206,16 @@ public class UserController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             userService.modifyStore(userIdx, store);
-            String result = "";
+            String result = "상점정보를 수정하였습니다.";
         return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

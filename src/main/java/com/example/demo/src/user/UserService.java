@@ -69,6 +69,7 @@ public class UserService {
     }
 
     public void modifyStore(int userIdx, Store store) throws BaseException {
+
         try {
             int result = userDao.modifyStoreInfo(userIdx, store);
             if (result == 0) {

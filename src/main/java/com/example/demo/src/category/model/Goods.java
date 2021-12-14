@@ -20,4 +20,5 @@ public class Goods {
     private Timestamp createdAt;
     private String safePayment;
     private int cntLikes;
+    private String statusLike;
 }

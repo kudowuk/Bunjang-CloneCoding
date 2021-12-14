@@ -26,9 +26,9 @@ public class ProductProvider {
     }
 
 
-    public List<GetMainRes> getMains() throws BaseException {
+    public List<GetMainRes> getMains(int userIdx) throws BaseException {
         try{
-            List<GetMainRes> getMainRes = productDao.getMains();
+            List<GetMainRes> getMainRes = productDao.getMains(userIdx);
             return getMainRes;
         }
         catch (Exception exception) {
@@ -39,9 +39,9 @@ public class ProductProvider {
 
 
     // GET 특정 상품 조회 API
-    public GetProductRes getProduct(int productIdx) throws BaseException {
+    public GetProductRes getProduct(int userIdx, int productIdx) throws BaseException {
         try{
-            GetProductRes getProductRes = productDao.getProduct(productIdx);
+            GetProductRes getProductRes = productDao.getProduct(userIdx, productIdx);
             return getProductRes;
         }
         catch (Exception exception) {

@@ -22,8 +22,8 @@ public class AddressDao {
     public List<GetAddressRes> getAddresses(int userIdx) {
         String getAddressQuery = "SELECT A.addressIdx, A.recipient, A.phone, A.latitude, A.longitude, A.roadName, A.detailedAddress, A.requestMsg, A.status\n" +
                 "FROM Address A\n" +
-                "LEFT JOIN Users U on A.userIdx = U.userIdx\n" +
-                "WHERE U.userIdx = ? AND A.status = 'Y' OR A.status = 'M';";
+                "INNER JOIN Users U on A.userIdx = U.userIdx\n" +
+                "WHERE A.userIdx = ? AND (A.status = 'Y' OR A.status = 'M');";
         int getAddressesByUserIdxParams = userIdx;
         return this.jdbcTemplate.query(getAddressQuery,
                 (rs, rowNum) -> new GetAddressRes(

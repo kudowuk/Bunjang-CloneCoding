@@ -69,6 +69,17 @@ public class UserProvider {
         }
     }
 
+//    // 수정할 상점명 중복 체크
+//    public int checkModifyStoreName(int userIdx, String storeName) throws BaseException{
+//        try{
+//            return userDao.checkModifyStoreName(userIdx, storeName);
+//        } catch (Exception exception){
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
+
+
+
     // POST 로그인
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
         User user = userDao.getPwd(postLoginReq);

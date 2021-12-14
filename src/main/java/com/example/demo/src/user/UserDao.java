@@ -89,11 +89,25 @@ public class UserDao {
     public int checkStoreName(String storeName){
         String checkStoreNameQuery = "select exists(select storeName from Users where storeName = ?)";
         String checkStoreNameParams = storeName;
+
         return this.jdbcTemplate.queryForObject(checkStoreNameQuery,
                 int.class,
                 checkStoreNameParams);
 
     }
+
+//    // 수정 상점명 중복체크
+//    public int checkModifyStoreName(int userIdx, String storeName){
+//        String checkStoreNameQuery = "select exists(select storeName from Users where userIdx = ? AND NOT storeName = ?)";
+//        String checkStoreNameParams = storeName;
+//        int checkUserIdxParams = userIdx;
+//
+//        return this.jdbcTemplate.queryForObject(checkStoreNameQuery,
+//                int.class,
+//                checkUserIdxParams, checkStoreNameParams);
+//
+//    }
+
 
 //    public int modifyStoreName(PatchUserReq patchUserReq){
 //        String modifyUserNameQuery = "UPDATE Users SET storeName  WHERE userIdx = ?";
@@ -137,12 +151,24 @@ public class UserDao {
         int checkUserIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserIdxQuery, int.class, checkUserIdxParams);
     }
-
     // 유저 탈퇴 확인
     public int checkStatusUserIdx(int userIdx){
         String checkUserIdxQuery = "select exists(select userIdx from Users where userIdx = ? AND Users.status = 'N')";
         int checkUserIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserIdxQuery, int.class, checkUserIdxParams);
+    }
+
+    // 주소 유무 확인
+    public int checkAddressIdx(int addressIdx){
+        String checkUserIdxQuery = "select exists(select addressIdx from Address where addressIdx = ?)";
+        int checkUserIdxParams = addressIdx;
+        return this.jdbcTemplate.queryForObject(checkUserIdxQuery, int.class, checkUserIdxParams);
+    }
+    // 주소 삭제 확인
+    public int checkStatusAddressIdx(int addressIdx){
+        String checkAddressIdxQuery = "select exists(select addressIdx from Address where addressIdx = ? AND Address.status = 'N')";
+        int checkAddressIdxParams = addressIdx;
+        return this.jdbcTemplate.queryForObject(checkAddressIdxQuery, int.class, checkAddressIdxParams);
     }
 
 
