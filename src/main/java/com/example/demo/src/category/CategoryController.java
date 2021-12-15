@@ -3,6 +3,7 @@ package com.example.demo.src.category;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.category.model.*;
+import com.example.demo.src.product.ProductDao;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,13 @@ public class CategoryController {
     @Autowired
     private final CategoryProvider categoryProvider;
     @Autowired
+    private final ProductDao productDao;
+    @Autowired
     private final JwtService jwtService;
 
-    public CategoryController(CategoryProvider categoryProvider, JwtService jwtService){
+    public CategoryController(CategoryProvider categoryProvider, ProductDao productDao, JwtService jwtService){
         this.categoryProvider = categoryProvider;
+        this.productDao = productDao;
         this.jwtService = jwtService;
     }
 
@@ -53,6 +57,16 @@ public class CategoryController {
     public BaseResponse<GetSubcategoryRes> getSubcategory(@PathVariable("subcategoryIdx") int subcategoryIdx) {
         // Get Category
         try {
+            // 서브카테고리 인덱스 유무 확인
+            if(productDao.checkSubcategoryIdx(subcategoryIdx) == 0) {
+                throw new BaseException(NOT_EXIST_SUBCATEGORY);
+            }
+            // 서브카테고리 비활성화 확인
+            if(productDao.checkStatusSubcategoryIdx(subcategoryIdx) == 1) {
+                throw new BaseException(INACTIVE_SUBCATEGORY);
+            }
+
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
 

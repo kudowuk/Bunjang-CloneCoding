@@ -6,6 +6,7 @@ import com.example.demo.src.review.model.*;
 import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.src.review.model.PatchReviewReq;
 import com.example.demo.src.review.model.Review;
+import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +30,18 @@ public class ReviewController {
     private final ReviewService reviewService;
     @Autowired
     private final JwtService jwtService;
+    @Autowired
+    private final UserDao userDao;
+    @Autowired
+    private final ReviewDao reviewDao;
 
 
-    public ReviewController(ReviewProvider reviewProvider, ReviewService reviewService, JwtService jwtService){
+    public ReviewController(ReviewProvider reviewProvider, ReviewService reviewService, JwtService jwtService, UserDao userDao, ReviewDao reviewDao){
         this.reviewProvider = reviewProvider;
         this.reviewService = reviewService;
         this.jwtService = jwtService;
+        this.userDao = userDao;
+        this.reviewDao = reviewDao;
     }
 
     // GET 상점 후기 조회 API
@@ -42,6 +49,16 @@ public class ReviewController {
     @GetMapping("/{userIdx}")
     public BaseResponse<List<GetReviewRes>> getReviews(@PathVariable("userIdx") int userIdx) {
         try {
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
@@ -62,8 +79,26 @@ public class ReviewController {
     @PostMapping("/{userIdx}/{purchaseIdx}")
     public BaseResponse<PostReviewRes> createReview(@PathVariable("userIdx") int userIdx, @PathVariable("purchaseIdx") int purchaseIdx, @RequestBody PostReviewReq postReviewReq) {
 
-
         try{
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
+            // 구매한 이력 확인
+            if(reviewDao.checkPurchaseIdx(purchaseIdx, userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 구매한 이력 상태 확인
+            if(reviewDao.checkStatusPurchaseIdx(purchaseIdx, userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인

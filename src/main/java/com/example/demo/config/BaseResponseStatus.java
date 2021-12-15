@@ -112,6 +112,14 @@ public enum BaseResponseStatus {
     INACTIVE_SUBCATEGORY(false, 3032, "비활성화된 서브카테고리입니다."),
     NOT_EXIST_AREA(false, 3033, "없는 거래지역입니다. 다시 확인해주세요."),
     INACTIVE_AREA(false, 3034, "비활성화된 거래지역입니다."),
+    NOT_EXIST_PRODUCT(false, 3035, "없는 상품입니다. 다시 확인해주세요."),
+    INACTIVE_PRODUCT(false, 3036, "비활성화된 상품입니다."),
+    SOLD_OR_BOOKED_PRODUCT(false, 3037, "이미 예약되었거나 팔린 상품입니다."),
+
+    // [POST] /purchases
+    NOT_EXIST_PURCHASE(false, 3038, "구매한 내역이 없습니다."),
+    INACTIVE_PURCHASE(false, 3039, "거래가 정상적으로 성사되지 않은 거래 입니다."),
+
 
 
     /**

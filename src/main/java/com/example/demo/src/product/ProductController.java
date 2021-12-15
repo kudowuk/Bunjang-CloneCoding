@@ -70,6 +70,15 @@ public class ProductController {
     public BaseResponse<GetProductRes> getProduct(@PathVariable("productIdx") int productIdx) {
         // Get Product
         try {
+            // 상품 유무 확인
+            if(productDao.checkProductIdx(productIdx) == 0) {
+                throw new BaseException(NOT_EXIST_PRODUCT);
+            }
+            // 상품 활성화 확인
+            if(productDao.checkStatusProductIdx(productIdx) == 1) {
+                throw new BaseException(INACTIVE_PRODUCT);
+            }
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
 

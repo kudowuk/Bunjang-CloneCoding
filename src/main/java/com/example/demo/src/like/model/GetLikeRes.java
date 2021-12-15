@@ -13,7 +13,7 @@ public class GetLikeRes {
     private String imgUrl;
     private String safePayment;
     private String likeStatus;
-    private String purchaseStatus;
+    private String productStatus;
     private String productName;
     private int prices;
     private String storeName;

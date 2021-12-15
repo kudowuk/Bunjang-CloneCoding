@@ -3,7 +3,7 @@ package com.example.demo.src.purchase;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.purchase.model.*;
-import com.example.demo.src.purchase.*;
+import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +24,15 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
     @Autowired
     private final JwtService jwtService;
+    @Autowired
+    private final UserDao userDao;
 
-    public PurchaseController(PurchaseProvider purchaseProvider, PurchaseService purchaseService, JwtService jwtService){
+    public PurchaseController(PurchaseProvider purchaseProvider, PurchaseService purchaseService, JwtService jwtService, UserDao userDao){
         this.purchaseProvider = purchaseProvider;
         this.purchaseService = purchaseService;
-        this.jwtService = jwtService;;
+        this.jwtService = jwtService;
+        this.userDao = userDao;
+        ;
     }
 
     /**
@@ -41,8 +45,16 @@ public class PurchaseController {
     @ResponseBody
     @PostMapping("/{userIdx}")
     public BaseResponse<PostPurchaseRes> createPurchase(@PathVariable("userIdx") int userIdx, @RequestBody PostPurchaseReq postPurchaseReq) {
-
         try{
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인

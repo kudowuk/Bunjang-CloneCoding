@@ -59,4 +59,21 @@ public class ReviewDao {
 
         return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
     }
+
+    // 구매한 이력 유무 확인
+    public int checkPurchaseIdx(int purchaseIdx, int userIdx){
+        String checkPurchaseIdxQuery = "select exists(select purchaseIdx from Purchase where purchaseIdx = ? AND userIdx = ? )";
+        int checkPurchaseIdxParams = purchaseIdx;
+        int checkUserIdxParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkPurchaseIdxQuery, int.class, checkPurchaseIdxParams, checkUserIdxParams);
+    }
+    // 구매한 이력 상태 확인
+    public int checkStatusPurchaseIdx(int purchaseIdx, int userIdx){
+        String checkPurchaseIdxQuery = "select exists(select purchaseIdx from Purchase where purchaseIdx = ? AND userIdx = ? AND Purchase.status = 'N')";
+        int checkPurchaseIdxParams = purchaseIdx;
+        int checkUserIdxParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkPurchaseIdxQuery, int.class, checkPurchaseIdxParams, checkUserIdxParams);
+    }
+
+
 }

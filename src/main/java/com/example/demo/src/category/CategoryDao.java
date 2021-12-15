@@ -71,14 +71,20 @@ public class CategoryDao {
                         rs.getString("imgUrl")),
                 getSubcategoryParams);
 
-        String goodsSql = "SELECT P.productIdx, P.prices, P.productName, A.areaName, P.createdAt, P.safePayment,\n" +
+        String goodsSql = "SELECT P.productIdx, P.prices, P.productName, A.areaName,\n" +
+                "       CASE WHEN TIMESTAMPDIFF(SECOND, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, P.createdAt, NOW()), '초 전') WHEN TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()), '분 전')\n" +
+                "           WHEN TIMESTAMPDIFF(HOUR, P.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, P.createdAt, NOW()), '시간 전')\n" +
+                "           WHEN TIMESTAMPDIFF(DAY, P.createdAt, NOW()) < 31 THEN CONCAT(TIMESTAMPDIFF(DAY, P.createdAt, NOW()), '일 전')\n" +
+                "           WHEN TIMESTAMPDIFF(MONTH, P.createdAt, NOW()) < 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, P.createdAt, NOW()), '달 전')\n" +
+                "           ELSE CONCAT(YEAR(TIMEDIFF(NOW(),P.createdAt)), '년 전') END createdAt,\n" +
+                "       P.safePayment,\n" +
                 "       (SELECT count(L.likeIdx) FROM Likes L WHERE P.productIdx = L.productIdx) cntLikes,\n" +
                 "       (SELECT imgUrl FROM ProductImg PI INNER JOIN Product on PI.productIdx = P.productIdx ORDER BY PI.productImgIdx LIMIT 1) imgUrl,\n" +
                 "       (SELECT L2.status FROM Likes L2 WHERE P.productIdx = L2.productIdx AND L2.userIdx = ?) statusLike\n" +
                 "FROM Product P\n" +
                 "LEFT JOIN Area A on P.areaIdx = A.areaIdx\n" +
                 "INNER JOIN Subcategory S on P.subcategoryIdx = S.subcategoryIdx\n" +
-                "WHERE P.subcategoryIdx = ? AND P.status = 'Y';";
+                "WHERE P.subcategoryIdx = ? AND P.status = 'ACTIVE';";
 
         List<Goods> goodsList = this.jdbcTemplate.query(goodsSql,
                 (rs, rowNum) -> new Goods(
@@ -87,7 +93,7 @@ public class CategoryDao {
                         rs.getInt("prices"),
                         rs.getString("productName"),
                         rs.getString("areaName"),
-                        rs.getTimestamp("createdAt"),
+                        rs.getString("createdAt"),
                         rs.getString("safePayment"),
                         rs.getInt("cntLikes"),
                         rs.getString("statusLike")),
@@ -100,6 +106,7 @@ public class CategoryDao {
 
         return getSubcategoryRes;
     }
+
 
 
 }

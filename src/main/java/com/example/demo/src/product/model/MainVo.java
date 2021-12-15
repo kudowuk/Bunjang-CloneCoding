@@ -15,10 +15,10 @@ public class MainVo {
     private int prices;
     private String productName;
     private String areaName;
-    private Timestamp createdAt;
+    private String createdAt;
     private String safePayment;
-    private int cntLikes;
     private String conditions;
+    private int cntLikes;
     private String freeShipping;
     private String negotiable;
     private String changes;

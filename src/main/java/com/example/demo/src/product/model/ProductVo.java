@@ -15,7 +15,7 @@ public class ProductVo {
     private int prices;
     private String productName;
     private String areaName;
-    private Timestamp createdAt;
+    private String createdAt;
     private String safePayment;
     private int cntLikes;
     private String conditions;
