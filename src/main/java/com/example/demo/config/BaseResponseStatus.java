@@ -30,14 +30,14 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
     POST_USERS_EMPTY_PASSWORD(false, 2018, "비밀번호를 입력해주세요."),
-    POST_USERS_INVALID_PASSWORD(false, 2019, "비밀번호를 '숫자', '문자', '특수문자' 각 1개 이상, 최소 8자에서 최대 16자이하로 입력해주세요"),
+    POST_USERS_INVALID_PASSWORD(false, 2019, "비밀번호를 '숫자', '문자', '특수문자' 각 1개 이상 입력해주세요.(최소 8자, 최대 16자)"),
     POST_USERS_EMPTY_STORENAME(false, 2020, "상점명을 입력해주세요."),
-    POST_USERS_INVALID_STORENAME(false, 2021, "상점명을 한글, 영어, 숫자만 입력해주세요(최소 2자 최대 10자)"),
+    POST_USERS_INVALID_STORENAME(false, 2021, "상점명을 한글, 영어, 숫자만 입력해주세요.(최소 2자, 최대 10자)"),
     POST_USERS_EXISTS_STORENAME(false,2022,"중복된 상점명입니다."),
     POST_USERS_EMPTY_PHONE(false, 2023, "휴대전화를 입력해주세요."),
     POST_USERS_INVALID_PHONE(false, 2024, "휴대전화형식에 맞게 숫자만 입력하세요."),
     POST_USERS_EMPTY_USERTYPE(false, 2025, "유저타입을 입력해주세요."),
-    POST_USERS_INVALID_USERTYPE(false, 2026, "유저타입을 'E':이메일 또는 'K':카카오 중 한글자만 입력해주세요."),
+    POST_USERS_INVALID_USERTYPE(false, 2026, "유저타입을 'E':이메일 또는 'K':카카오 중 한 글자만 입력해주세요."),
 
     // [PATCH] /users
     PATCH_USERS_EMPTY_STORENAME(false, 2030, "수정할 상점명을 입력해주세요."),
@@ -50,26 +50,45 @@ public enum BaseResponseStatus {
     POST_ADDRESSES_EMPTY_PHONE(false, 2041, "휴대전화를 입력해주세요."),
     POST_ADDRESSES_INVALID_PHONE(false, 2042, "휴대전화형식에 맞게 숫자만 입력하세요."),
     POST_ADDRESSES_EMPTY_LATITUDE(false, 2043, "국내 위도를 입력해주세요."),
-    POST_ADDRESSES_INVALID_LATITUDE(false, 2044, "알맞은 국내 위도를 작성해주세요."),
+    POST_ADDRESSES_INVALID_LATITUDE(false, 2044, "알맞은 국내 위도를 입력해주세요."),
     POST_ADDRESSES_EMPTY_LONGITUDE(false, 2045, "국내 경도를 입력해주세요."),
-    POST_ADDRESSES_INVALID_LONGITUDE(false, 2046, "알맞은 국내 경도를 작성해주세요."),
+    POST_ADDRESSES_INVALID_LONGITUDE(false, 2046, "알맞은 국내 경도를 입력해주세요."),
     POST_ADDRESSES_EMPTY_ROADNAME(false, 2047, "도로명 주소를 입력해주세요."),
     POST_ADDRESSES_EMPTY_STATUS(false, 2048, "배송지 주소 상태(구분)를 입력해주세요."),
-    POST_ADDRESSES_INVALID_STATUS(false, 2049, "'Y':활성화 또는 'M'(Main):기본배송지 중 한글자만 입력해주세요."),
+    POST_ADDRESSES_INVALID_STATUS(false, 2049, "'Y':활성화 또는 'M'(Main):기본배송지 중 한 글자만 입력해주세요."),
 
     // [PATCH] /addresses
     PATCH_ADDRESSES_EMPTY_RECIPIENT(false, 2050, "수정할 받는분 성함을 입력해주세요."),
     PATCH_ADDRESSES_EMPTY_PHONE(false, 2051, "수정할 휴대전화를 입력해주세요."),
     PATCH_ADDRESSES_INVALID_PHONE(false, 2052, "휴대전화형식에 맞게 숫자만 입력하세요."),
     PATCH_ADDRESSES_EMPTY_LATITUDE(false, 2053, "수정할 국내 위도를 입력해주세요."),
-    PATCH_ADDRESSES_INVALID_LATITUDE(false, 2054, "알맞은 국내 위도를 작성해주세요."),
+    PATCH_ADDRESSES_INVALID_LATITUDE(false, 2054, "알맞은 국내 위도를 입력해주세요."),
     PATCH_ADDRESSES_EMPTY_LONGITUDE(false, 2055, "수정할 국내 경도를 입력해주세요."),
-    PATCH_ADDRESSES_INVALID_LONGITUDE(false, 2056, "알맞은 국내 경도를 작성해주세요."),
+    PATCH_ADDRESSES_INVALID_LONGITUDE(false, 2056, "알맞은 국내 경도를 입력해주세요."),
     PATCH_ADDRESSES_EMPTY_ROADNAME(false, 2057, "수정할 도로명 주소를 입력해주세요."),
     PATCH_ADDRESSES_EMPTY_STATUS(false, 2058, "수정할 배송지 주소 상태(구분)를 입력해주세요."),
-    PATCH_ADDRESSES_INVALID_STATUS(false, 2059, "'Y':활성화 또는 'M'(Main):기본배송지 중 한글자만 입력해주세요."),
+    PATCH_ADDRESSES_INVALID_STATUS(false, 2059, "'Y':활성화 또는 'M'(Main):기본배송지 중 한 글자만 입력해주세요."),
 
-
+    // [POST] /products
+    POST_PRODUCTS_EMPTY_PRODUCTNAME(false, 2060, "상품명을 입력해주세요."),
+    POST_PRODUCTS_EMPTY_SUBCATEGORYIDX(false, 2061, "서브카테고리 인덱스를 입력해주세요."),
+    POST_PRODUCTS_LENGTH_CONTENT(false, 2062, "상품 설명은 2000자 이내로 작성해주세요."),
+    POST_PRODUCTS_EMPTY_FREESHIPPING(false, 2063, "배송비 여부를 입력해주세요."),
+    POST_PRODUCTS_INVALID_FREESHIPPING(false, 2064, "배송비에 'Y':포함 또는 'N':비포함 한 글자만 입력해주세요."),
+    POST_PRODUCTS_EMPTY_NEGOTIABLE(false, 2065, "협의 여부를 입력해주세요."),
+    POST_PRODUCTS_INVALID_NEGOTIABLE(false, 2066, "협의에 'Y':가능 또는 'N':불가능 한 글자만 입력해주세요."),
+    POST_PRODUCTS_EMPTY_QUANTITY(false, 2067, "개수를 입력해주세요."),
+    POST_PRODUCTS_RANGE_QUANTITY(false, 2068, "개수의 범위는 1~999개 입니다."),
+    POST_PRODUCTS_EMPTY_CONDITIONS(false, 2069, "상품 상태를 입력해주세요."),
+    POST_PRODUCTS_INVALID_CONDITIONS(false, 2070, "상품 상태에 'U'(Used):중고상품 또는 'N'(New): 새상품 중 한 글자만 입력해주세요."),
+    POST_PRODUCTS_EMPTY_CHANGES(false, 2071, "교환 여부를 입력해주세요."),
+    POST_PRODUCTS_INVALID_CHANGES(false, 2072, "교환에 'Y':가능 또는 'N':불가능 한 글자만 입력해주세요."),
+    POST_PRODUCTS_EMPTY_IMGLIST(false, 2073, "이미지 리스트를 입력해주세요. 최소 1개이상 등록해야합니다."),
+    POST_PRODUCTS_EMPTY_IMAGEURL(false, 2074, "이미지URL을 입력해주세요."),
+    POST_PRODUCTS_LENGTH_IMAGEURL(false, 2075, "이미지URL을 1000자이하로 입력해주세요."),
+    POST_PRODUCTS_LENGTH_TAGNAME(false, 2076, "태그이름은 9자이하로 입력해주세요."),
+    POST_PRODUCTS_MAX_IMAGELIST(false, 2077, "이미지는 최대 12개만 입력할 수 있어요."),
+    POST_PRODUCTS_MAX_TAGLIST(false, 2078, "태그는 최대 5개만 입력할 수 있어요."),
     /**
      * 3000 : Response 오류
      */
@@ -87,6 +106,13 @@ public enum BaseResponseStatus {
     // [GET], [PATCH] /address
     NOT_EXIST_ADDRESS(false, 3031, "없는 주소입니다. 다시 확인해주세요."),
     DELETED_ADDRESS(false, 3032, "삭제한 주소입니다."),
+
+    // [GET], [PATCH] /products
+    NOT_EXIST_SUBCATEGORY(false, 3031, "없는 서브카테고리입니다. 다시 확인해주세요."),
+    INACTIVE_SUBCATEGORY(false, 3032, "비활성화된 서브카테고리입니다."),
+    NOT_EXIST_AREA(false, 3033, "없는 거래지역입니다. 다시 확인해주세요."),
+    INACTIVE_AREA(false, 3034, "비활성화된 거래지역입니다."),
+
 
     /**
      * 4000 : Database, Server 오류

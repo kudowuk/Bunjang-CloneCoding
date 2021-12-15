@@ -21,16 +21,10 @@ public class LikeDao {
     // GET 즐겨찾기 리스트 조회 API
     public List<GetLikeRes> getLikes(int userIdx) {
         String getLikeQuery = "SELECT L.likeIdx, (SELECT PI.imgUrl FROM ProductImg PI INNER JOIN Product P on PI.productIdx = P.productIdx ORDER BY PI.productImgIdx LIMIT 1) AS imgUrl,\n" +
-                "       P.safePayment, L.status AS likeStatus, P.status AS productStatus, P.productName, P.prices, U.storeName, CASE WHEN TIMESTAMPDIFF(SECOND, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, P.createdAt, NOW()), '초 전')\n" +
-                "           WHEN TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()), '분 전')\n" +
-                "           WHEN TIMESTAMPDIFF(HOUR, P.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, P.createdAt, NOW()), '시간 전')\n" +
-                "           WHEN TIMESTAMPDIFF(DAY, P.createdAt, NOW()) < 31 THEN CONCAT(TIMESTAMPDIFF(DAY, P.createdAt, NOW()), '일 전')\n" +
-                "           WHEN TIMESTAMPDIFF(MONTH, P.createdAt, NOW()) < 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, P.createdAt, NOW()), '달 전')\n" +
-                "           ELSE CONCAT(YEAR(TIMEDIFF(NOW(),P.createdAt)), '년 전') END AS createdAt\n" +
-                "FROM Product P\n" +
+                "       P.safePayment, L.status AS likeStatus, P.status AS productStatus, P.productName, P.prices, U.storeName, L.createdAt\n" +
                 "INNER JOIN Users U on P.userIdx = U.userIdx\n" +
                 "INNER JOIN Likes L on P.productIdx = L.productIdx\n" +
-                "WHERE L.userIdx = 2 AND L.status = 'Y';";
+                "WHERE L.userIdx = ? AND L.status = 'Y';";
         int getLikesByUserIdxParams = userIdx;
 
         return this.jdbcTemplate.query(getLikeQuery,

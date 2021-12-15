@@ -12,13 +12,13 @@ import java.util.List;
 public class PostProductReq {
 
     private String productName;
-    private int subcategoryIdx;
+    private Integer subcategoryIdx;
     private String content;
     private int prices;
     private String freeShipping;
     private String negotiable;
     private int areaIdx;
-    private int quantity;
+    private Integer quantity;
     private String conditions;
     private String changes;
 

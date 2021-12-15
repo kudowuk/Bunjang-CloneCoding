@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,10 +45,8 @@ public class CategoryDao {
             GetCategoryRes getCategoryRes = new GetCategoryRes(categoryVo.getCategoryIdx(), categoryVo.getCategoryName(), subcategoryList);
 
             result.add(getCategoryRes);
+
         }
-
-
-
 
         return result;
     }

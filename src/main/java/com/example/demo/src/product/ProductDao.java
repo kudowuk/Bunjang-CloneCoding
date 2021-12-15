@@ -200,4 +200,31 @@ public class ProductDao {
         return this.jdbcTemplate.update(modifyProductQuery,modifyProductParams);
     }
 
+    // 서브카테고리 유무 확인
+    public int checkSubcategoryIdx(int subcategoryIdx){
+        String checkUserIdxQuery = "select exists(select subcategoryIdx from Subcategory where subcategoryIdx = ?)";
+        int checkSubcategoryIdxParams = subcategoryIdx;
+        return this.jdbcTemplate.queryForObject(checkUserIdxQuery, int.class, checkSubcategoryIdxParams);
+    }
+    // 서브카테고리 활성화 확인
+    public int checkStatusSubcategoryIdx(int subcategoryIdx){
+        String checkUserIdxQuery = "select exists(select subcategoryIdx from Subcategory where subcategoryIdx = ? AND Subcategory.status = 'N')";
+        int checkStatusSubcategoryIdxParams = subcategoryIdx;
+        return this.jdbcTemplate.queryForObject(checkUserIdxQuery, int.class, checkStatusSubcategoryIdxParams);
+    }
+
+    // 거래지역 유무 확인
+    public int checkAreaIdx(int areaIdx){
+        String checkAreaIdxQuery = "select exists(select areaIdx from Area where areaIdx = ?)";
+        int checkAreaIdxParams = areaIdx;
+        return this.jdbcTemplate.queryForObject(checkAreaIdxQuery, int.class, checkAreaIdxParams);
+    }
+    // 거래지역 활성화 확인
+    public int checkStatusAreaIdx(int areaIdx){
+        String checkAreaIdxQuery = "select exists(select areaIdx from Area where areaIdx = ? AND Area.status = 'N')";
+        int checkStatusAreaIdxParams = areaIdx;
+        return this.jdbcTemplate.queryForObject(checkAreaIdxQuery, int.class, checkStatusAreaIdxParams);
+    }
+
+
 }

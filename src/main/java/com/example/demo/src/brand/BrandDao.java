@@ -20,18 +20,18 @@ public class BrandDao {
     // GET 전체 브랜드 리스트 조회 API
     public List<GetBrandRes> getBrands(int userIdx) {
         String getBrandQuery = "SELECT B.brandIdx, B.brandKorean, B.brandEnglish, B.imgUrl,\n" +
-                "       (SELECT count(followIdx) FROM Follow F WHERE F.brandIdx = B.brandIdx) cntFollowers,\n" +
+                "       (SELECT COUNT(followIdx) FROM Follow F WHERE B.brandIdx = F.brandIdx) cntFollowers,\n" +
                 "       (SELECT F2.status FROM Follow F2 WHERE B.brandIdx = F2.brandIdx AND F2.userIdx = ?) statusFollow\n" +
                 "FROM Brand B\n" +
                 "LEFT JOIN Follow F on B.brandIdx = F.brandIdx\n" +
-                "WHERE B.status = 'Y';\n";
+                "WHERE B.status = 'Y';";
         int getBrandsByUserIdxParams = userIdx;
 
         return this.jdbcTemplate.query(getBrandQuery,
                 (rs, rowNum) -> new GetBrandRes(
                         rs.getInt("brandIdx"),
-                        rs.getString("safePayment"),
-                        rs.getString("productName"),
+                        rs.getString("brandKorean"),
+                        rs.getString("brandEnglish"),
                         rs.getString("imgUrl"),
                         rs.getInt("cntFollowers"),
                         rs.getString("statusFollow")),

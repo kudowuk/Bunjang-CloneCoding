@@ -91,6 +91,101 @@ public class ProductController {
     @ResponseBody
     @PostMapping("/{userIdx}")
     public BaseResponse<PostProductRes> createProduct(@PathVariable("userIdx") int userIdx, @RequestBody PostProductReq postProductReq) {
+
+        // 상품명명 입력하기
+        if(postProductReq.getProductName() == null || postProductReq.getProductName().equals("")){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_PRODUCTNAME);
+        }
+
+        // 서브카테고리 입력하기
+        if(postProductReq.getSubcategoryIdx() == null){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_SUBCATEGORYIDX);
+        }
+//        if(postProductReq.getSubcategoryIdx() == Integer.parseInt(null)){
+//            return new BaseResponse<>(POST_USERS_EMPTY_PRODUCTNAME);
+//        }
+
+        // 상품설명 길이 제한
+        if(postProductReq.getContent().length() > 2000){
+            return new BaseResponse<>(POST_PRODUCTS_LENGTH_CONTENT);
+        }
+
+        // 배송비 여부를 입력하기
+        if(postProductReq.getFreeShipping() == null || postProductReq.getFreeShipping().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_FREESHIPPING);
+        }
+        // 배송비 포함에 'Y':포함 또는 'N'비포함 한 글자만 입력하기
+        if(!postProductReq.getFreeShipping().equals("Y") && !postProductReq.getFreeShipping().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_FREESHIPPING);
+        }
+
+        // 협의 여부를 입력하기
+        if(postProductReq.getNegotiable() == null || postProductReq.getNegotiable().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_NEGOTIABLE);
+        }
+        // 배송비 포함에 'Y':포함 또는 'N'비포함 한 글자만 입력하기
+        if(!postProductReq.getNegotiable().equals("Y") && !postProductReq.getNegotiable().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_NEGOTIABLE);
+        }
+
+        // 개수를 입력하기
+        if(postProductReq.getQuantity() == null){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_QUANTITY);
+        }
+        // 개수 범위 1~999개 사이 입력하기
+        if(postProductReq.getQuantity() < 1 || postProductReq.getQuantity() > 999){
+            return new BaseResponse<>(POST_PRODUCTS_RANGE_QUANTITY);
+        }
+
+        // 상품 상태를 입력하기
+        if(postProductReq.getConditions() == null || postProductReq.getConditions().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_CONDITIONS);
+        }
+        // 상품 상태에 'U'(Used):중고상품 또는 'N'(New): 새상품 중 한 글자만 입력하기
+        if(!postProductReq.getConditions().equals("U") && !postProductReq.getConditions().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_CONDITIONS);
+        }
+
+        // 교환 여부를 입력하기[
+        if(postProductReq.getConditions() == null || postProductReq.getConditions().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_CHANGES);
+        }
+        // 상품 상태에 'U'(Used):중고상품 또는 'N'(New): 새상품 중 한 글자만 입력하기
+        if(!postProductReq.getConditions().equals("U") && !postProductReq.getConditions().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_CHANGES);
+        }
+
+        // 이미지 리스트 입력하기
+        if(postProductReq.getImgList() == null || postProductReq.getImgList().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_IMGLIST);
+        }
+        // 이미지 리스트 최대 12개
+        if(postProductReq.getImgList().size() > 12){
+            return new BaseResponse<>(POST_PRODUCTS_MAX_IMAGELIST);
+        }
+        // 태그 리스트 최대 5개
+        if(postProductReq.getTagList().size() > 5){
+            return new BaseResponse<>(POST_PRODUCTS_MAX_IMAGELIST);
+        }
+        for (PostProductImgReq img : postProductReq.getImgList()){
+            // 이미지URL 입력하기
+            if (img.getImgUrl() == null || img.getImgUrl().isEmpty()){
+                return new BaseResponse<>(POST_PRODUCTS_EMPTY_IMAGEURL);
+            }
+            // 이미지 URL 문자열 1000자 이하
+            else if (img.getImgUrl().length() > 1000){
+                return new BaseResponse<>(POST_PRODUCTS_LENGTH_IMAGEURL);
+            }
+        }
+
+        for (PostProductTagReq tag : postProductReq.getTagList()) {
+            // 태그이름 최대 9자
+            if (tag.getTagName().length() > 9) {
+                return new BaseResponse<>(POST_PRODUCTS_LENGTH_TAGNAME);
+            }
+        }
+
+
         try{
             // 유저 유무 확인
             if(userDao.checkUserIdx(userIdx) == 0) {
@@ -99,6 +194,20 @@ public class ProductController {
             // 유저 탈퇴 확인
             if(userDao.checkStatusUserIdx(userIdx) == 1) {
                 throw new BaseException(BREAKAWAY_USER);
+            }
+
+            // 서브카테고리 유무 확인
+            if(productDao.checkSubcategoryIdx(postProductReq.getSubcategoryIdx()) == 0) {
+                throw new BaseException(NOT_EXIST_SUBCATEGORY);
+            }
+            // 서브카테고리 활성화 확인
+            if(productDao.checkStatusSubcategoryIdx(postProductReq.getSubcategoryIdx()) == 1) {
+                throw new BaseException(INACTIVE_SUBCATEGORY);
+            }
+
+            // 거래지역 활성화 확인
+            if(productDao.checkStatusAreaIdx(postProductReq.getAreaIdx()) == 1) {
+                throw new BaseException(INACTIVE_AREA);
             }
 
             //jwt에서 idx 추출.

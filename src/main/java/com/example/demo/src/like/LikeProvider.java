@@ -20,13 +20,15 @@ public class LikeProvider {
     }
 
     public List<GetLikeRes> getLikes(int userIdx) throws BaseException {
-        try{
-            List<GetLikeRes> getLikeRes = likeDao.getLikes(userIdx);
-            return getLikeRes;
-        }
-        catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
+        List<GetLikeRes> getLikeRes = likeDao.getLikes(userIdx);
+        return getLikeRes;
+//        try{
+//            List<GetLikeRes> getLikeRes = likeDao.getLikes(userIdx);
+//            return getLikeRes;
+//        }
+//        catch (Exception exception) {
+//            throw new BaseException(DATABASE_ERROR);
+//        }
     }
 
 

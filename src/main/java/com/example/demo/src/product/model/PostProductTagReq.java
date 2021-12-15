@@ -9,7 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostProductTagReq {
 
-    private int productTagIdx;
     private int productIdx;
     private String tagName;
 

@@ -53,7 +53,6 @@ public class CategoryController {
     public BaseResponse<GetSubcategoryRes> getSubcategory(@PathVariable("subcategoryIdx") int subcategoryIdx) {
         // Get Category
         try {
-
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
 
