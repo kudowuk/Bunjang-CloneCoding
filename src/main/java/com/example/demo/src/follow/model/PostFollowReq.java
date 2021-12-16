@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostFollowReq {
 
-    private int brandIdx;
-    private int followingUserIdx;
+    private Integer brandIdx;
+    private Integer followingUserIdx;
 
 }

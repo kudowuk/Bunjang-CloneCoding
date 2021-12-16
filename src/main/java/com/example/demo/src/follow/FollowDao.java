@@ -22,55 +22,59 @@ public class FollowDao {
 
     // GET 팔로워 리스트 조회 API
     public List<GetFollowerRes> getFollowers(int userIdx) {
-        String getFollowQuery = "SELECT L.followIdx, (SELECT PI.imgUrl FROM ProductImg PI INNER JOIN Product P on PI.productIdx = P.productIdx ORDER BY PI.productImgIdx LIMIT 1) AS imgUrl,\n" +
-                "       P.safePayment, L.status AS followStatus, P.status AS productStatus, P.productName, P.prices, U.storeName, L.createdAt\n" +
-                "INNER JOIN Users U on P.userIdx = U.userIdx\n" +
-                "INNER JOIN Follows L on P.productIdx = L.productIdx\n" +
-                "WHERE L.userIdx = ? AND L.status = 'Y';";
+        String getFollowQuery = "SELECT F.followIdx, (SELECT ST.profiles FROM Store ST WHERE F.userIdx = ST.userIdx) profiles ,\n" +
+                "       (SELECT U2.storeName FROM Users U2 WHERE F.userIdx = U2.userIdx) storeName,\n" +
+                "       (SELECT COUNT(P.productIdx) FROM Product P WHERE F.userIdx = P.userIdx) cntProducts,\n" +
+                "       (SELECT COUNT(F2.followIdx) FROM Follow F2 WHERE F.userIdx = F2.followingUserIdx) cntFollowers\n" +
+                "FROM Follow F\n" +
+                "WHERE F.followingUserIdx = ? AND F.status = 'Y' ORDER BY F.createdAt DESC;";
         int getFollowsByUserIdxParams = userIdx;
 
         return this.jdbcTemplate.query(getFollowQuery,
                 (rs, rowNum) -> new GetFollowerRes(
                         rs.getInt("followIdx"),
-                        rs.getString("imgUrl"),
-                        rs.getString("safePayment"),
-                        rs.getInt("prices"),
-                        rs.getInt("prices")),
+                        rs.getString("profiles"),
+                        rs.getString("storeName"),
+                        rs.getInt("cntProducts"),
+                        rs.getInt("cntFollowers")),
                 getFollowsByUserIdxParams);
     }
 
 
     // GET 팔로잉 리스트 조회 API
-    public List<GetFollowingRes> getFollowings(int followingUserIdx) {
-        String getFollowingQuery = "SELECT C.categoryIdx, C.categoryName\n" +
-                "FROM Following C\n" +
-                "WHERE C.status = 'Y';";
-        int getFollowsByFollowingUserIdxParams = followingUserIdx;
+    public List<GetFollowingRes> getFollowings(int userIdx) {
+        String getFollowingQuery = "SELECT F.followIdx, (SELECT ST.profiles FROM Store ST WHERE F.followingUserIdx = ST.userIdx) profiles,\n" +
+                "       (SELECT U2.storeName FROM Users U2 WHERE F.followingUserIdx = U2.userIdx) storeName,\n" +
+                "       (SELECT COUNT(P.productIdx) FROM Product P WHERE F.followingUserIdx = P.userIdx) cntProducts,\n" +
+                "       (SELECT COUNT(F2.followIdx) FROM Follow F2 WHERE F2.followingUserIdx = F.followingUserIdx) cntFollowers\n" +
+                "FROM Follow F\n" +
+                "WHERE F.userIdx = ? AND F.status = 'Y' ORDER BY F.createdAt DESC;";
+        int getFollowsByFollowingUserIdxParams = userIdx;
 
         List<GetFollowingRes> result = new ArrayList<>();
 
         List<FollowingVo> followingList = this.jdbcTemplate.query(getFollowingQuery,
                 (rs, rowNum) -> new FollowingVo(
                         rs.getInt("followIdx"),
-                        rs.getString("profile"),
+                        rs.getString("profiles"),
                         rs.getString("storeName"),
                         rs.getInt("cntProducts"),
                         rs.getInt("cntFollowers")),
                         getFollowsByFollowingUserIdxParams);
 
         for (FollowingVo followingVo : followingList) {
-            String subcategorySql = "SELECT S.subcategoryIdx, S.subcategoryName, S.imgUrl\n" +
-                    "FROM Subcategory S\n" +
-                    "INNER JOIN Following C on S.categoryIdx = C.categoryIdx\n" +
-                    "WHERE C.categoryIdx = ? AND C.status = 'Y' AND S.status = 'Y';";
+            String subcategorySql = "SELECT (SELECT imgUrl FROM ProductImg PI INNER JOIN Product on PI.productIdx = P.productIdx WHERE PI.status = 'Y' ORDER BY PI.productImgIdx LIMIT 1 ) imgUrl, (SELECT P.prices LIMIT 1) prices\n" +
+                    "FROM Product P\n" +
+                    "INNER JOIN Follow F on P.userIdx = F.followingUserIdx\n" +
+                    "WHERE F.followIdx = ? ORDER BY P.createdAt DESC LIMIT 3;";
 
             List<ProductVo> productList = this.jdbcTemplate.query(subcategorySql,
                     (rs, rowNum) -> new ProductVo(
                             rs.getString("imgUrl"),
                             rs.getInt("prices")),
-                    getFollowsByFollowingUserIdxParams);
+                    followingVo.getFollowIdx());
 
-            GetFollowingRes getFollowingRes = new GetFollowingRes(followingVo.getFollowIdx(), followingVo.getProfile(), followingVo.getStoreName(), followingVo.getCntProducts(), followingVo.getCntProducts(), productList);
+            GetFollowingRes getFollowingRes = new GetFollowingRes(followingVo.getFollowIdx(), followingVo.getProfiles(), followingVo.getStoreName(), followingVo.getCntProducts(), followingVo.getCntFollowers(), productList);
 
             result.add(getFollowingRes);
         }
@@ -81,8 +85,8 @@ public class FollowDao {
 
     // POST  등록 API
     public int createFollow(int userIdx, PostFollowReq postFollowReq){
-        String createFollowQuery = "INSERT INTO Follows (userIdx, followingUserIdx, brandIdx) VALUES (?,?,?)";
-        Object[] createFollowParams = new Object[]{userIdx, postFollowReq.getFollowingUserIdx(), postFollowReq.getBrandIdx() };
+        String createFollowQuery = "INSERT INTO Follow (userIdx, brandIdx, followingUserIdx) VALUES (?,?,?)";
+        Object[] createFollowParams = new Object[]{userIdx, postFollowReq.getBrandIdx(), postFollowReq.getFollowingUserIdx()};
         this.jdbcTemplate.update(createFollowQuery, createFollowParams);
 
         String lastInsertAdQuery = "select last_insert_id()";
@@ -91,10 +95,38 @@ public class FollowDao {
 
     // PATCH 즐겨찾기 수정 API
     public int modifyFollow(PatchFollowReq patchFollowReq){
-        String modifyFollowQuery = "update Follows set status = ? where userIdx = ? AND followIdx = ?";
+        String modifyFollowQuery = "update Follow set status = ? where userIdx = ? AND followIdx = ?";
         Object[] modifyFollowParams = new Object[]{patchFollowReq.getStatus(), patchFollowReq.getUserIdx(), patchFollowReq.getFollowIdx()};
 
         return this.jdbcTemplate.update(modifyFollowQuery,modifyFollowParams);
+    }
+
+    // 브랜드 유무확인
+    public int checkBrandIdx(int brandIdx){
+        String checkBrandQuery = "select exists(select brandIdx from Brand where brandIdx = ?)";
+        int checkBrandParams = brandIdx;
+        return this.jdbcTemplate.queryForObject(checkBrandQuery, int.class, checkBrandParams);
+
+    }
+    // 브랜드 활성화 확인
+    public int checkStatusBrandIdx(int brandIdx){
+        String checkBrandIdxQuery = "select exists(select brandIdx from Brand where brandIdx = ? AND Brand.status = 'N')";
+        int checkBrandIdxParams = brandIdx;
+        return this.jdbcTemplate.queryForObject(checkBrandIdxQuery, int.class, checkBrandIdxParams);
+    }
+
+    // 팔로잉 하려는 유저인덱스 유무확인
+    public int checkFollowingUserIdx(int followingUserIdx){
+        String checkFollowQuery = "select exists(select followingUserIdx from Follow where followingUserIdx = ?)";
+        int checkFollowParams = followingUserIdx;
+        return this.jdbcTemplate.queryForObject(checkFollowQuery, int.class, checkFollowParams);
+
+    }
+    // 팔로잉 하려는 유저인덱스 활성화 확인
+    public int checkStatusFollowingUserIdx(int followingUserIdx){
+        String checkFollowIdxQuery = "select exists(select followingUserIdx from Follow where followingUserIdx = ? AND Follow.status = 'N')";
+        int checkFollowIdxParams = followingUserIdx;
+        return this.jdbcTemplate.queryForObject(checkFollowIdxQuery, int.class, checkFollowIdxParams);
     }
 
 

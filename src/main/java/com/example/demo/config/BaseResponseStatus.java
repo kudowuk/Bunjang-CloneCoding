@@ -89,6 +89,13 @@ public enum BaseResponseStatus {
     POST_PRODUCTS_LENGTH_TAGNAME(false, 2076, "태그이름은 9자이하로 입력해주세요."),
     POST_PRODUCTS_MAX_IMAGELIST(false, 2077, "이미지는 최대 12개만 입력할 수 있어요."),
     POST_PRODUCTS_MAX_TAGLIST(false, 2078, "태그는 최대 5개만 입력할 수 있어요."),
+
+    // [POST] /follows
+    POST_FOLLOWS_EMPTY_TARGETIDX(false, 2091, "팔로우하려는 인덱스를 입력해주세요."),
+    POST_FOLLOWS_ONE_TARGETIDX(false, 2092, "브랜드 인덱스 또는 유저 인덱스 둘중 하나 만 입력해주세요."),
+    POST_IMPOSSIBLE_SAME_USER(false, 2093, "저도 저 자신을 좋아하지만, 자신을 팔로우 할 수 없습니다."),
+
+
     /**
      * 3000 : Response 오류
      */
@@ -120,7 +127,11 @@ public enum BaseResponseStatus {
     NOT_EXIST_PURCHASE(false, 3038, "구매한 내역이 없습니다."),
     INACTIVE_PURCHASE(false, 3039, "거래가 정상적으로 성사되지 않은 거래 입니다."),
 
-
+    // [POST] /follows
+    NOT_EXIST_BRAND(false, 3040, "없는 브랜드입니다. 다시 확인해주세요."),
+    INACTIVE_BRAND(false, 3041, "비활성화된 브랜드입니다."),
+    NOT_EXIST_FOLLOW(false, 3042, "팔로우 하려는 유저 인덱스는 없는 유저입니다. 다시 확인해주세요."),
+    INACTIVE_FOLLOW(false, 3043, "팔로우 하려는 유저 인덱스는 비활성화 되어있습니다."),
 
     /**
      * 4000 : Database, Server 오류

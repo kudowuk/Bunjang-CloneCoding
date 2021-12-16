@@ -117,11 +117,12 @@ public class ProductDao {
                 "INNER JOIN Subcategory S on P.subcategoryIdx = S.subcategoryIdx\n" +
                 "INNER JOIN Users U on P.userIdx = U.userIdx\n" +
                 "WHERE P.productIdx = ? AND P.status = 'ACTIVE' AND S.status = 'Y';";
-        int getProductParams = productIdx;
         int getUserParams = userIdx;
+        int getProductParams = productIdx;
 
-        List<GetProductRes> result = new ArrayList<>();
-
+        // 리스트가 아닌 객체로 받아오기 아래 것 주석처리
+        // List<GetProductRes> result = new ArrayList<>();
+        
         ProductVo product = this.jdbcTemplate.queryForObject(getProductQuery,
                 (rs, rowNum) -> new ProductVo(
                         rs.getInt("productIdx"),
@@ -142,7 +143,7 @@ public class ProductDao {
                         rs.getInt("cntFollowers"),
                         rs.getFloat("avgScores"),
                         rs.getString("statusLike")),
-                getProductParams, getUserParams);
+                getUserParams, getProductParams);
 
         String imgSql = "SELECT PI.productImgIdx, PI.productIdx, PI.imgUrl " +
                 "FROM ProductImg PI " +
@@ -170,8 +171,9 @@ public class ProductDao {
 
         GetProductRes getProductRes = new GetProductRes(product.getProductIdx(), product.getPrices(), product.getProductName(), product.getAreaName(), product.getCreatedAt(), product.getSafePayment(), product.getCntLikes(), product.getConditions(), product.getFreeShipping(), product.getNegotiable(), product.getChanges(), product.getQuantity(), product.getContent(), product.getSubcategoryName(), product.getStoreName(), product.getCntFollowers(), product.getAvgScores(), product.getStatusLike(), imgList, tagList);
 
-        result.add(getProductRes);
-
+        // 리스트가 아닌 객체로 받아오기 아래 것 주석처리
+        // result.add(getProductRes);
+        
         return getProductRes;
     }
 

@@ -10,7 +10,7 @@ import lombok.Setter;
 public class FollowingVo {
 
     private int followIdx;
-    private String profile;
+    private String profiles;
     private String storeName;
     private int cntProducts;
     private int cntFollowers;

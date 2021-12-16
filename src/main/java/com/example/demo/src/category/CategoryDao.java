@@ -62,7 +62,8 @@ public class CategoryDao {
         int getSubcategoryParams = subcategoryIdx;
         int getUserParams = userIdx;
 
-        List<GetSubcategoryRes> result = new ArrayList<>();
+        // 리스트가 아닌 객체로 받아오기 아래 것 주석처리
+        // List<GetSubcategoryRes> result = new ArrayList<>();
 
         SubcategoryVo subcategory = this.jdbcTemplate.queryForObject(getSubcategoryQuery,
                 (rs, rowNum) -> new SubcategoryVo(
@@ -102,7 +103,8 @@ public class CategoryDao {
 
         GetSubcategoryRes getSubcategoryRes = new GetSubcategoryRes(subcategory.getSubcategoryIdx(), subcategory.getSubcategoryName(), subcategory.getImgUrl(), goodsList);
 
-        result.add(getSubcategoryRes);
+        // 리스트가 아닌 객체로 받아오기 아래 것 주석처리
+        //result.add(getSubcategoryRes);
 
         return getSubcategoryRes;
     }

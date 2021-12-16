@@ -130,7 +130,7 @@ public class ReviewController {
             PatchReviewReq patchReviewReq = new PatchReviewReq(userIdx, purchaseIdx, reviewIdx, review.getScore(), review.getContent(), review.getImgUrl1(), review.getImgUrl2(), review.getImgUrl3(), review.getStatus() );
             reviewService.modifyReview(patchReviewReq);
 
-            String result = "상점 후기가 수정되었습니다.";
+            String result = "상점 후기를 수정하였습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

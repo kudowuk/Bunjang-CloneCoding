@@ -12,7 +12,7 @@ import java.util.List;
 public class GetFollowingRes {
 
     private int followIdx;
-    private String profile;
+    private String profiles;
     private String storeName;
     private int cntProducts;
     private int cntFollowers;
