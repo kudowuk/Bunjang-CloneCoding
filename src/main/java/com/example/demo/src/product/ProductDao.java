@@ -116,7 +116,7 @@ public class ProductDao {
                 "LEFT JOIN Area A on P.areaIdx = A.areaIdx\n" +
                 "INNER JOIN Subcategory S on P.subcategoryIdx = S.subcategoryIdx\n" +
                 "INNER JOIN Users U on P.userIdx = U.userIdx\n" +
-                "WHERE P.productIdx = ? AND P.status = 'ACTIVE' AND S.status = 'Y';";
+                "WHERE P.productIdx = ? AND S.status = 'Y' AND NOT P.status = 'INACTIVE';";
         int getUserParams = userIdx;
         int getProductParams = productIdx;
 
@@ -148,7 +148,7 @@ public class ProductDao {
         String imgSql = "SELECT PI.productImgIdx, PI.productIdx, PI.imgUrl " +
                 "FROM ProductImg PI " +
                 "INNER JOIN Product P on P.productIdx = PI.productIdx " +
-                "WHERE PI.productIdx = ? AND P.status ='ACTIVE' AND PI.status = 'Y'";
+                "WHERE PI.productIdx = ? AND PI.status = 'Y' AND NOT P.status = 'INACTIVE'";
 
         List<ProductImg> imgList = this.jdbcTemplate.query(imgSql,
                 (rs, rowNum) -> new ProductImg(
@@ -160,7 +160,7 @@ public class ProductDao {
         String tagSql = "SELECT PT.productTagIdx, PT.productIdx, PT.tagName " +
                 "FROM ProductTag PT " +
                 "INNER JOIN Product P on P.productIdx = PT.productIdx " +
-                "WHERE PT.productIdx =? AND P.status = 'ACTIVE' AND PT.status = 'Y'";
+                "WHERE PT.productIdx =? AND PT.status = 'Y' AND NOT P.status = 'INACTIVE'";
 
         List<ProductTag> tagList = this.jdbcTemplate.query(tagSql,
                 (rs, rowNum) -> new ProductTag(
@@ -258,6 +258,7 @@ public class ProductDao {
         int checkStatusProductIdxParams = productIdx;
         return this.jdbcTemplate.queryForObject(checkDoneProductIdxQuery, int.class, checkStatusProductIdxParams);
     }
+
 
 
 }

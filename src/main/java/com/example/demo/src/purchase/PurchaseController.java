@@ -2,7 +2,6 @@ package com.example.demo.src.purchase;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.purchase.model.GetPurchaseerRes;
 import com.example.demo.src.purchase.model.*;
 import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;
@@ -50,10 +49,9 @@ public class PurchaseController {
                 throw new BaseException(BREAKAWAY_USER);
             }
 
-
-            //jwt에서 idx 추출.
+            // jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
+            // userIdx와 접근한 유저가 같은지 확인
             if(userIdx != userIdxByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }

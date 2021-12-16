@@ -31,14 +31,12 @@ public class FollowProvider {
 
     // GET 팔로잉 조회 API
     public List<GetFollowingRes> getFollowings(int userIdx) throws BaseException {
-        List<GetFollowingRes> getFollowingRes = followDao.getFollowings(userIdx);
-        return getFollowingRes;
-//        try{
-//            List<GetFollowingRes> getFollowingRes = followDao.getFollowings(userIdx);
-//            return getFollowingRes;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
+        try{
+            List<GetFollowingRes> getFollowingRes = followDao.getFollowings(userIdx);
+            return getFollowingRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 

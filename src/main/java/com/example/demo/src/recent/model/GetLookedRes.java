@@ -1,4 +1,4 @@
-package com.example.demo.src.purchase.model;
+package com.example.demo.src.recent.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,15 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetPurchaseRes {
+public class GetLookedRes {
 
-    private int purchaseIdx;
+    private int lookedIdx;
     private String imgUrl;
     private String status;
     private String productName;
     private int prices;
-    private String storeName;
     private String createdAt;
-
 
 }

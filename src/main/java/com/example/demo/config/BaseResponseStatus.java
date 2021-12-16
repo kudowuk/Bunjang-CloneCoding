@@ -133,6 +133,14 @@ public enum BaseResponseStatus {
     NOT_EXIST_FOLLOW(false, 3042, "팔로우 하려는 유저 인덱스는 없는 유저입니다. 다시 확인해주세요."),
     INACTIVE_FOLLOW(false, 3043, "팔로우 하려는 유저 인덱스는 비활성화 되어있습니다."),
 
+    // [POST] /recent
+    NOT_EXIST_LOOKED(false, 3050, "없는 본상품 인덱스 입니다. 다시 확인해주세요."),
+    NOT_EXIST_SEARCHED(false, 3051, "없는 검색어 인덱스 입니다. 다시 확인해주세요."),
+    DUPLICATE_LOOKED(false, 3052, "이미 등록한 본상품입니다."),
+    DUPLICATE_SEARCHED(false, 3053, "이미 등록한 검색어입니다."),
+    ALREADY_DELETED_LOOKED(false, 3054, "이미 삭제한 최근 본상품 인덱스입니다. 다시확인해주세요."),
+    ALREADY_DELETED_SEARCHED(false, 3055, "이미 삭제한 최근 검색어 인덱스입니다. 다시확인해주세요."),
+
     /**
      * 4000 : Database, Server 오류
      */
