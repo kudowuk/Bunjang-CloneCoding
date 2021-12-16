@@ -1,5 +1,5 @@
 # PROJECT INTRODUCTION
-![](:zap:) 취향을 거래하자! 취향과 일상을 잇는 중고 거래 플랫폼 번개장터로
+:zap: 취향을 거래하자! 취향과 일상을 잇는 중고 거래 플랫폼 번개장터로
 클론 코딩을 하게 되었다.
 
 # RISING TEST
@@ -7,11 +7,11 @@
 - 클라이언트 5명과 서버 1명으로 협업하여 개발한다.
 
 
-![](:link:) [API 명세서](https://docs.google.com/spreadsheets/d/1f2uhQ48zo2Mm-SXu24Tr_bWWGg5Rh4mt-s2f6PTtyl4/edit#gid=955882431)
+:link: [API 명세서](https://docs.google.com/spreadsheets/d/1f2uhQ48zo2Mm-SXu24Tr_bWWGg5Rh4mt-s2f6PTtyl4/edit#gid=955882431)
 [:open_file_folder:] [디렉토리 구조](ㅇ)
 
-![](:link:) [ERD 설계도]
-(:memo:) [ERD 설계도]
+:link: [ERD 설계도]
+:memo: [ERD 설계도]
 
 (:rotating_light:) 반가워.. 에러들..
 서버 자주 터짐ㅜㅜ, 서버 구축 처음부터 끝까지 다시...
