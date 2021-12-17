@@ -187,7 +187,7 @@ public class ProductDao {
         String lastInsertAdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertAdQuery,int.class);
     }
-
+    // POST 상품 이미지 등록 API
     public int createProductImg(int productIdx, PostProductImgReq postProductImgReq){
         String createProductImgQuery = "insert into ProductImg (productIdx, imgUrl) VALUES (?,?)";
         Object[] createProductImgParams = new Object[]{productIdx, postProductImgReq.getImgUrl()};
@@ -196,7 +196,7 @@ public class ProductDao {
         String lastInsertAdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertAdQuery,int.class);
     }
-
+    // POST 상품 이미지 태그 API
     public int createProductTag(int productIdx, PostProductTagReq postProductTagReq){
         String createProductTagQuery = "insert into ProductTag (productIdx, tagName) VALUES (?,?)";
         Object[] createProductTagParams = new Object[]{productIdx, postProductTagReq.getTagName()};
@@ -206,7 +206,7 @@ public class ProductDao {
         return this.jdbcTemplate.queryForObject(lastInsertAdQuery,int.class);
     }
 
-    // PATCH 카트 담기 수정 API
+    // PATCH 상품 수정 API
     public int modifyProduct(PatchProductReq patchProductReq){
         String modifyProductQuery = "update Product set productName = ?, subcategoryIdx = ?, content = ?, prices = ?, freeShipping = ?, areaIdx = ?, quantity = ?, conditions = ?, changes = ? where productIdx = ? AND userIdx = ?";
         Object[] modifyProductParams = new Object[]{patchProductReq.getProductName(), patchProductReq.getSubcategoryIdx(), patchProductReq.getContent(), patchProductReq.getPrices(), patchProductReq.getFreeShipping(), patchProductReq.getAreaIdx(), patchProductReq.getQuantity(), patchProductReq.getConditions(), patchProductReq.getChanges(), patchProductReq.getUserIdx(), patchProductReq.getProductIdx()};

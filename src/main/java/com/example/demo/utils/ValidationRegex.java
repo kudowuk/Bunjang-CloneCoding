@@ -72,7 +72,7 @@ public class ValidationRegex {
         return matcher.find();
     }
 
-    // 경도 정규식 표현식식
+    // 경도 정규식 표현식
     public static boolean isRegexLongitude(String target) {
         String regex = "^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);

@@ -76,37 +76,34 @@ public class ReviewController {
 
     // POST 상점 후기 등록 API
     @ResponseBody
-    @PostMapping("/{userIdx}/{purchaseIdx}")
-    public BaseResponse<PostReviewRes> createReview(@PathVariable("userIdx") int userIdx, @PathVariable("purchaseIdx") int purchaseIdx, @RequestBody PostReviewReq postReviewReq) {
+    @PostMapping("/{purchaseIdx}")
+    public BaseResponse<PostReviewRes> createReview(@PathVariable("purchaseIdx") int purchaseIdx, @RequestBody PostReviewReq postReviewReq) {
 
         try{
-            // 유저 유무 확인
-            if(userDao.checkUserIdx(userIdx) == 0) {
-                throw new BaseException(NOT_EXIST_USER);
-            }
-            // 유저 탈퇴 확인
-            if(userDao.checkStatusUserIdx(userIdx) == 1) {
-                throw new BaseException(BREAKAWAY_USER);
-            }
-
-            // 구매한 이력 확인
-            if(reviewDao.checkPurchaseIdx(purchaseIdx, userIdx) == 0) {
-                throw new BaseException(NOT_EXIST_USER);
-            }
-            // 구매한 이력 상태 확인
-            if(reviewDao.checkStatusPurchaseIdx(purchaseIdx, userIdx) == 1) {
-                throw new BaseException(BREAKAWAY_USER);
-            }
-
 
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
-            if(userIdx != userIdxByJwt) {
-                return new BaseResponse<>(INVALID_USER_JWT);
+
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdxByJwt) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdxByJwt) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
             }
 
-            PostReviewRes postReviewRes = reviewService.createReview(userIdx, purchaseIdx, postReviewReq);
+            // 구매한 이력 확인
+            if(reviewDao.checkPurchaseIdx(purchaseIdx, userIdxByJwt) == 0) {
+                throw new BaseException(NOT_EXIST_PURCHASE);
+            }
+            // 구매한 이력 상태 확인
+            if(reviewDao.checkStatusPurchaseIdx(purchaseIdx, userIdxByJwt) == 1) {
+                throw new BaseException(INACTIVE_PURCHASE);
+            }
+
+            PostReviewRes postReviewRes = reviewService.createReview(userIdxByJwt, purchaseIdx, postReviewReq);
             return new BaseResponse<>(postReviewRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -118,14 +115,39 @@ public class ReviewController {
     @PatchMapping("/{userIdx}/{purchaseIdx}/{reviewIdx}")
     public BaseResponse<String> modifyReview(@PathVariable("userIdx") int userIdx, @PathVariable("purchaseIdx") int purchaseIdx, @PathVariable("reviewIdx") int reviewIdx, @RequestBody Review review){
 
-
         try {
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
             if(userIdx != userIdxByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
+            // 거래내역 유무 확인
+            if(reviewDao.checkAnyPurchaseIdx(purchaseIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 구매한 이력 상태 확인
+            if(reviewDao.checkStatusPurchaseIdx(purchaseIdx, userIdxByJwt) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
+
+            // 리뷰 유무 확인
+            if(reviewDao.checkReviewIdx(reviewIdx) == 0) {
+                throw new BaseException(NOT_EXIST_REVIEW);
+            }
+
 
             PatchReviewReq patchReviewReq = new PatchReviewReq(userIdx, purchaseIdx, reviewIdx, review.getScore(), review.getContent(), review.getImgUrl1(), review.getImgUrl2(), review.getImgUrl3(), review.getStatus() );
             reviewService.modifyReview(patchReviewReq);

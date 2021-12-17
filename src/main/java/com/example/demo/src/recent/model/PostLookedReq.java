@@ -10,5 +10,5 @@ import lombok.Setter;
 public class PostLookedReq {
 
     private int userIdx;
-    private int productIdx;
+    private Integer productIdx;
 }

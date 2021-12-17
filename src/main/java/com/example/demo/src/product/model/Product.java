@@ -11,13 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 public class Product {
     private String productName;
-    private int subcategoryIdx;
+    private Integer subcategoryIdx;
     private String content;
     private int prices;
     private String freeShipping;
     private String negotiable;
     private String areaName;
-    private int quantity;
+    private Integer quantity;
     private String conditions;
     private String changes;
 }

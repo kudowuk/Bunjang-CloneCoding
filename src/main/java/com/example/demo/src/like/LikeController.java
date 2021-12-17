@@ -3,6 +3,7 @@ package com.example.demo.src.like;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.like.model.*;
+import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +27,18 @@ public class LikeController {
     private final LikeService likeService;
     @Autowired
     private final JwtService jwtService;
+    @Autowired
+    private final UserDao userDao;
+    @Autowired
+    private final LikeDao likeDao;
 
 
-    public LikeController(LikeProvider likeProvider, LikeService likeService, JwtService jwtService) {
+    public LikeController(LikeProvider likeProvider, LikeService likeService, JwtService jwtService, UserDao userDao, LikeDao likeDao) {
         this.likeProvider = likeProvider;
         this.likeService = likeService;
         this.jwtService = jwtService;
+        this.userDao = userDao;
+        this.likeDao = likeDao;
     }
 
     // GET 즐겨찾기 조회 API
@@ -39,6 +46,16 @@ public class LikeController {
     public BaseResponse<List<GetLikeRes>> getLikes(@PathVariable("userIdx") int userIdx) {
 
         try {
+
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
@@ -60,6 +77,16 @@ public class LikeController {
     public BaseResponse<PostLikeRes> createLike(@PathVariable("userIdx") int userIdx, @RequestBody PostLikeReq postLikeReq) {
 
         try{
+
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
@@ -81,6 +108,21 @@ public class LikeController {
 
 
         try {
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
+            // 찜인덱스 유무 확인
+            if(likeDao.checkLikeIdx(likeIdx) == 0) {
+                throw new BaseException(NOT_EXIST_LIKE);
+            }
+
+
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인

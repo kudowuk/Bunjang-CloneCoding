@@ -222,5 +222,31 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/{userIdx}/autoLogin")
+    public BaseResponse<GetAutoLoginRes> GetAutoLogin(@PathVariable int userIdx) {
+        try {
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (userIdx != userIdxByJwt) {
+                return new BaseResponse(INVALID_USER_JWT);
+            }
+
+            return new BaseResponse<>(new GetAutoLoginRes("Success Auto Login"));
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
 }

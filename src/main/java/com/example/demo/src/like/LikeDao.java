@@ -65,6 +65,13 @@ public class LikeDao {
         return this.jdbcTemplate.update(modifyLikeQuery,modifyLikeParams);
     }
 
+    // 유저 유무 확인
+    public int checkLikeIdx(int likeIdx){
+        String checkLikeIdxQuery = "select exists(select likeIdx from Likes where likeIdx = ?)";
+        int checkLikeIdxParams = likeIdx;
+        return this.jdbcTemplate.queryForObject(checkLikeIdxQuery, int.class, checkLikeIdxParams);
+    }
+
 
 
 }

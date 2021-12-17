@@ -89,12 +89,16 @@ public enum BaseResponseStatus {
     POST_PRODUCTS_LENGTH_TAGNAME(false, 2076, "태그이름은 9자이하로 입력해주세요."),
     POST_PRODUCTS_MAX_IMAGELIST(false, 2077, "이미지는 최대 12개만 입력할 수 있어요."),
     POST_PRODUCTS_MAX_TAGLIST(false, 2078, "태그는 최대 5개만 입력할 수 있어요."),
+    POST_PRODUCTS_INVALID_IMAGEURL(false, 2075, "이미지URL 형식은 http|https 다음으로, jpg|jpeg|gif|png 사진형식만 가능합니다."),
 
     // [POST] /follows
     POST_FOLLOWS_EMPTY_TARGETIDX(false, 2091, "팔로우하려는 인덱스를 입력해주세요."),
     POST_FOLLOWS_ONE_TARGETIDX(false, 2092, "브랜드 인덱스 또는 유저 인덱스 둘중 하나 만 입력해주세요."),
     POST_IMPOSSIBLE_SAME_USER(false, 2093, "저도 저 자신을 좋아하지만, 자신을 팔로우 할 수 없습니다."),
 
+    // [POST] /recent
+    POST_SEARCHED_EMPTY_WORD(false, 2095, "검색어를 입력해주세요."),
+    POST_LOOKED_EMPTY_WORD(false, 2096, "상품 인덱스를 입력해주세요."),
 
     /**
      * 3000 : Response 오류
@@ -133,6 +137,12 @@ public enum BaseResponseStatus {
     NOT_EXIST_FOLLOW(false, 3042, "팔로우 하려는 유저 인덱스는 없는 유저입니다. 다시 확인해주세요."),
     INACTIVE_FOLLOW(false, 3043, "팔로우 하려는 유저 인덱스는 비활성화 되어있습니다."),
 
+    // [PATCH] /reviews
+    NOT_EXIST_REVIEW(false, 3045, "없는 리뷰입니다. 다시 확인해주세요."),
+
+    // [PATCH] /likes
+    NOT_EXIST_LIKE(false, 3046, "없는 찜 인덱스 입니다. 다시 확인해주세요."),
+
     // [POST] /recent
     NOT_EXIST_LOOKED(false, 3050, "없는 본상품 인덱스 입니다. 다시 확인해주세요."),
     NOT_EXIST_SEARCHED(false, 3051, "없는 검색어 인덱스 입니다. 다시 확인해주세요."),
@@ -140,6 +150,7 @@ public enum BaseResponseStatus {
     DUPLICATE_SEARCHED(false, 3053, "이미 등록한 검색어입니다."),
     ALREADY_DELETED_LOOKED(false, 3054, "이미 삭제한 최근 본상품 인덱스입니다. 다시확인해주세요."),
     ALREADY_DELETED_SEARCHED(false, 3055, "이미 삭제한 최근 검색어 인덱스입니다. 다시확인해주세요."),
+
 
     /**
      * 4000 : Database, Server 오류

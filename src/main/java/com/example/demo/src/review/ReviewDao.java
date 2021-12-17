@@ -55,7 +55,7 @@ public class ReviewDao {
     // PATCH 리뷰 수정 API
     public int modifyReview(PatchReviewReq patchReviewReq){
         String modifyReviewQuery = "update Review set score = ?, content = ?, imgUrl1 = ?, imgUrl2 = ?, imgUrl3 = ?, status = ? where userIdx = ? AND reviewIdx = ? AND purchaseIdx = ?";
-        Object[] modifyReviewParams = new Object[]{patchReviewReq.getScore(), patchReviewReq.getContent(), patchReviewReq.getImgUrl1(), patchReviewReq.getImgUrl2(), patchReviewReq.getImgUrl3(), patchReviewReq.getStatus(), patchReviewReq.getReviewIdx(), patchReviewReq.getPurchaseIdx(), patchReviewReq.getUserIdx()};
+        Object[] modifyReviewParams = new Object[]{patchReviewReq.getScore(), patchReviewReq.getContent(), patchReviewReq.getImgUrl1(), patchReviewReq.getImgUrl2(), patchReviewReq.getImgUrl3(), patchReviewReq.getStatus(),patchReviewReq.getUserIdx(), patchReviewReq.getReviewIdx(),  patchReviewReq.getPurchaseIdx()};
 
         return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
     }
@@ -73,6 +73,20 @@ public class ReviewDao {
         int checkPurchaseIdxParams = purchaseIdx;
         int checkUserIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkPurchaseIdxQuery, int.class, checkPurchaseIdxParams, checkUserIdxParams);
+    }
+
+    // 거래내역 유무 확인
+    public int checkAnyPurchaseIdx(int purchaseIdx){
+        String checkPurchaseIdxQuery = "select exists(select purchaseIdx from Purchase where purchaseIdx = ?)";
+        int checkPurchaseIdxParams = purchaseIdx;
+        return this.jdbcTemplate.queryForObject(checkPurchaseIdxQuery, int.class, checkPurchaseIdxParams);
+    }
+
+    // 리뷰 유무 확인
+    public int checkReviewIdx(int reviewIdx){
+        String checkReviewIdxQuery = "select exists(select reviewIdx from Review where reviewIdx = ?)";
+        int checkReviewIdxParams = reviewIdx;
+        return this.jdbcTemplate.queryForObject(checkReviewIdxQuery, int.class, checkReviewIdxParams);
     }
 
 

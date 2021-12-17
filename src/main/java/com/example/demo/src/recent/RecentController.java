@@ -99,6 +99,11 @@ public class RecentController {
     @PostMapping("/looked")
     public BaseResponse<PostLookedRes> createLooked(@RequestBody PostLookedReq postLookedReq) {
 
+        // 검색어 입력하기
+        if(postLookedReq.getProductIdx() == null){
+            return new BaseResponse<>(POST_LOOKED_EMPTY_WORD);
+        }
+
         try{
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
@@ -133,6 +138,11 @@ public class RecentController {
     @ResponseBody
     @PostMapping("/searched")
     public BaseResponse<PostSearchedRes> createSearched(@RequestBody PostSearchedReq postSearchedReq) {
+
+        // 검색어 입력하기
+        if(postSearchedReq.getWord() == null || postSearchedReq.getWord().equals("")){
+            return new BaseResponse<>(POST_SEARCHED_EMPTY_WORD);
+        }
 
         try{
             // jwt에서 idx 추출.

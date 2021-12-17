@@ -101,7 +101,7 @@ public class ProductController {
     @PostMapping("/{userIdx}")
     public BaseResponse<PostProductRes> createProduct(@PathVariable("userIdx") int userIdx, @RequestBody PostProductReq postProductReq) {
 
-        // 상품명명 입력하기
+        // 상품명 입력하기
         if(postProductReq.getProductName() == null || postProductReq.getProductName().equals("")){
             return new BaseResponse<>(POST_PRODUCTS_EMPTY_PRODUCTNAME);
         }
@@ -172,6 +172,8 @@ public class ProductController {
         if(postProductReq.getImgList().size() > 12){
             return new BaseResponse<>(POST_PRODUCTS_MAX_IMAGELIST);
         }
+
+
         // 태그 리스트 최대 5개
         if(postProductReq.getTagList().size() > 5){
             return new BaseResponse<>(POST_PRODUCTS_MAX_IMAGELIST);
@@ -185,6 +187,7 @@ public class ProductController {
             else if (img.getImgUrl().length() > 1000){
                 return new BaseResponse<>(POST_PRODUCTS_LENGTH_IMAGEURL);
             }
+
         }
 
         for (PostProductTagReq tag : postProductReq.getTagList()) {
@@ -242,7 +245,78 @@ public class ProductController {
     @ResponseBody
     @PatchMapping("/{userIdx}/{productIdx}")
     public BaseResponse<String> modifyProduct(@PathVariable("userIdx") int userIdx, @PathVariable("productIdx") int productIdx, @RequestBody Product product){
+
+        // 상품명 입력하기
+        if(product.getProductName() == null || product.getProductName().equals("")){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_PRODUCTNAME);
+        }
+
+        // 서브카테고리 입력하기
+        if(product.getSubcategoryIdx() == null){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_SUBCATEGORYIDX);
+        }
+        // 상품설명 길이 제한
+        if(product.getContent().length() > 2000){
+            return new BaseResponse<>(POST_PRODUCTS_LENGTH_CONTENT);
+        }
+
+        // 배송비 여부를 입력하기
+        if(product.getFreeShipping() == null || product.getFreeShipping().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_FREESHIPPING);
+        }
+        // 배송비 포함에 'Y':포함 또는 'N'비포함 한 글자만 입력하기
+        if(!product.getFreeShipping().equals("Y") && !product.getFreeShipping().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_FREESHIPPING);
+        }
+
+        // 협의 여부를 입력하기
+        if(product.getNegotiable() == null || product.getNegotiable().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_NEGOTIABLE);
+        }
+        // 배송비 포함에 'Y':포함 또는 'N'비포함 한 글자만 입력하기
+        if(!product.getNegotiable().equals("Y") && !product.getNegotiable().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_NEGOTIABLE);
+        }
+
+        // 개수를 입력하기
+        if(product.getQuantity() == null){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_QUANTITY);
+        }
+        // 개수 범위 1~999개 사이 입력하기
+        if(product.getQuantity() < 1 || product.getQuantity() > 999){
+            return new BaseResponse<>(POST_PRODUCTS_RANGE_QUANTITY);
+        }
+
+        // 상품 상태를 입력하기
+        if(product.getConditions() == null || product.getConditions().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_CONDITIONS);
+        }
+        // 상품 상태에 'U'(Used):중고상품 또는 'N'(New): 새상품 중 한 글자만 입력하기
+        if(!product.getConditions().equals("U") && !product.getConditions().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_CONDITIONS);
+        }
+
+        // 교환 여부를 입력하기[
+        if(product.getConditions() == null || product.getConditions().isEmpty()){
+            return new BaseResponse<>(POST_PRODUCTS_EMPTY_CHANGES);
+        }
+        // 상품 상태에 'U'(Used):중고상품 또는 'N'(New): 새상품 중 한 글자만 입력하기
+        if(!product.getConditions().equals("U") && !product.getConditions().equals("N")){
+            return new BaseResponse<>(POST_PRODUCTS_INVALID_CHANGES);
+        }
+
+
         try {
+
+            // 유저 유무 확인
+            if(userDao.checkUserIdx(userIdx) == 0) {
+                throw new BaseException(NOT_EXIST_USER);
+            }
+            // 유저 탈퇴 확인
+            if(userDao.checkStatusUserIdx(userIdx) == 1) {
+                throw new BaseException(BREAKAWAY_USER);
+            }
+
 
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
@@ -253,7 +327,7 @@ public class ProductController {
 
             PatchProductReq patchProductReq = new PatchProductReq(userIdx, productIdx, product.getProductName(), product.getSubcategoryIdx(), product.getContent(), product.getPrices(), product.getFreeShipping(), product.getNegotiable(), product.getAreaName(), product.getQuantity(), product.getConditions(), product.getChanges());
             productService.modifyProduct(patchProductReq);
-            String result = "";
+            String result = "상품정보를 수정하였습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
