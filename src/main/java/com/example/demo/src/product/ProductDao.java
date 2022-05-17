@@ -21,7 +21,8 @@ public class ProductDao {
     // GET 전체 주문 내역 조회 API
     public List<GetMainRes> getMains(int userIdx) {
         String getMainQuery = "SELECT P.productIdx, P.prices, P.productName, A.areaName,\n" +
-                "       CASE WHEN TIMESTAMPDIFF(SECOND, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, P.createdAt, NOW()), '초 전') WHEN TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()), '분 전')\n" +
+                "       CASE WHEN TIMESTAMPDIFF(SECOND, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, P.createdAt, NOW()), '초 전')\n" +
+                "           WHEN TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, P.createdAt, NOW()), '분 전')\n" +
                 "           WHEN TIMESTAMPDIFF(HOUR, P.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, P.createdAt, NOW()), '시간 전')\n" +
                 "           WHEN TIMESTAMPDIFF(DAY, P.createdAt, NOW()) < 31 THEN CONCAT(TIMESTAMPDIFF(DAY, P.createdAt, NOW()), '일 전')\n" +
                 "           WHEN TIMESTAMPDIFF(MONTH, P.createdAt, NOW()) < 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, P.createdAt, NOW()), '달 전')\n" +
